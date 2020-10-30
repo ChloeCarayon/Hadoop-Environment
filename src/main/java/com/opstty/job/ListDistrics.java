@@ -9,22 +9,22 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.opstty.mapper.DistrictTreesMapper;
-import com.opstty.reducer.DistrictTreesReducer;
+import com.opstty.mapper.ListDistrictsMapper;
+import com.opstty.reducer.ListReducer;
 
-public class DistrictTrees {
+public class ListDistrics {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (otherArgs.length < 2) {
-            System.err.println("Usage: districttrees <in> [<in>...] <out>");
+            System.err.println("Usage: listdistricts <in> [<in>...] <out>");
             System.exit(2);
         }
-        Job job = Job.getInstance(conf, "districttrees");
-        job.setJarByClass(DistrictTrees.class);
-        job.setMapperClass(DistrictTreesMapper.class);
-        job.setCombinerClass(DistrictTreesReducer.class);
-        job.setReducerClass(DistrictTreesReducer.class);
+        Job job = Job.getInstance(conf, "listdistricts");
+        job.setJarByClass(ListDistrics.class);
+        job.setMapperClass(ListDistrictsMapper.class);
+        job.setCombinerClass(ListReducer.class);
+        job.setReducerClass(ListReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         for (int i = 0; i < otherArgs.length - 1; ++i) {
