@@ -13,12 +13,10 @@ public class ListSpeciesMapper extends Mapper<Object, Text, Text, IntWritable> {
 
     public void map(Object key, Text value, Context context)
             throws IOException, InterruptedException {
-    	int count = 0;
-        StringTokenizer itr = new StringTokenizer(value.toString(), ";");
-        while (itr.hasMoreTokens() && count != 4) {
-            word.set(itr.nextToken());
-            count++;
-        }
+    	String[] line = value.toString().split(";");
+    	
+        word.set(line[3]);
+        
         if (!word.toString().equals("ESPECE")) {
         	context.write(word, one);
         }
