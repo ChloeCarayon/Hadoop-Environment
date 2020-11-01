@@ -13,6 +13,7 @@ public class MaxReducer extends Reducer<Text, FloatWritable, Text, FloatWritable
             throws IOException, InterruptedException {
         float max = 0;
         for (FloatWritable val : values) {
+            // change the value if it is bigger than the max
         	if (val.get() > max) {
         		max = val.get();
         	}

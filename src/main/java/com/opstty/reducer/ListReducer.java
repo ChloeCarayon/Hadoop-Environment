@@ -11,6 +11,7 @@ public class ListReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
     public void reduce(Text key, Iterable<IntWritable> values, Context context)
             throws IOException, InterruptedException {
+       // only combiner
         context.write(key, result);
     }
 }
