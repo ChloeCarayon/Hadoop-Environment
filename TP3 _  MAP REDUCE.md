@@ -1,24 +1,25 @@
-**Author**: Carayon Chloé - Taillieu Victor
-**date**: 30/10/2020
+**Authors**: Carayon Chloé - Taillieu Victor
+**Date**: 30/10/2020
 
 ---
-# TP3 :  MAP REDUCE Java
+# TP3:  MapReduce Java
 ---
 
-# Introduction
-In this TP, We have to create our own MapReduce program in java.
+## Introduction
 
-But firstly, we have to import our csv file in the cluster:
-``` 
--sh-4.2$ hdfs dfs -put tree.csv 
+In this TP, we have to create our own MapReduce programs in Java.
+
+But firstly, we need to import the csv file in the cluster:
+```
+-sh-4.2$ hdfs dfs -put tree.csv
 ```
 
-Now let's test it with the MapReduce program: 
+Now let's test it with the wordcount MapReduce program:
 ```
 -sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar \wordcount trees.csv treeoutput
-
 ```
-We will obtain those kind of results:
+
+We obtain this result:
 ```
 -sh-4.2$  hdfs dfs -cat treeoutput/part-r-00000 | head -n 8
 (48.8183933679,	1
@@ -29,41 +30,39 @@ We will obtain those kind of results:
 (48.8215800145,	1
 (48.8220238534,	1
 (48.8224956954,	1
-
 ```
 
-Our mission is to create several Map Reduce program as the wordcount.
+Our mission is to create several MapReduce programs as the wordcount example.
 By looking at the intial project:
 ![](https://i.imgur.com/WJiAFuh.png)
-We understand, we have jobs which will use mappers and reducers. 
-In order to create new jobs, we will have to create new mappers and reducers, use them in the corresponding job and  will have to modify the AppDriver to run them.
-
+We understand that we have jobs that use mappers and reducers.
+In order to create new jobs, we will have to create new mappers and reducers, use them in the corresponding job and include the jobs in the AppDriver to be able to run them.
 
 ## 1.8.1 Districts containing trees (very easy)
-We are going to create *ListDistrics* which will show the list of the district from our input trees.
-It will implement a new mapper and a new reducer.
-In our source code, you can see how we implement our mapper and reducer. 
-By looking on the csv file, the district are on the second column. 
-For the mapper named *ListDistrictsMapper*,for each line, we will only return one information: the district as inputs for the reducer.
 
-For the reducer and combiner called *ListReducer*, we will just do the combination of our input from the mapper.
+We created *ListDistrics* which displays the list of districts containing trees in the input file.
+It uses a new mapper and a new reducer.
+In our source code, you can see how we implemented our mapper and reducer.
+By looking at the csv file, we see that the districts are in the second column.
+For each line, the mapper named *ListDistrictsMapper* only returns one information: the district as input key for the reducer (and the arbitrary value 1).
 
-In *ListDistrics* , we will specify that we used *ListDistrictsMapper* as mapper and *ListReducer* as combiner and reducer.
+For the reducer and combiner called *ListReducer*, we just combine the keys from the mapper.
 
-Finally, we will have to call our *ListDistrics*  in the AppDriver in order to be able to run it.
+In *ListDistrics*, we specify that we use *ListDistrictsMapper* as mapper and *ListReducer* as combiner and reducer.
 
-Now let's take a look on our output.
+Finally, we have to call our *ListDistrics* in the AppDriver in order to be able to run it.
+
+Now let's take a look at the output.
 First, we copy the jar:
-
 ```
 $ scp hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar ccarayon@hadoop-edge01.efrei.online:/home/ccarayon/
 Welcome to EFREI Hadoop Cluster
 
-Password: 
-hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-wi 100%   51MB 931.6KB/s   00:56 
-
+Password:
+hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-wi 100%   51MB 931.6KB/s   00:56
 ```
-We can see the several MapReduce operations available:
+
+We can see the several MapReduce programs available:
 ```
 --sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar
 An example program must be given as the first argument.
@@ -72,14 +71,12 @@ Valid program names are:
   wordcount: A map/reduce program that counts the words in the input files.
 ```
 
-
-Then we can do the MapReduce operation listdistricts:
+Then we can execute the MapReduce program listdistricts:
 ```
 -sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar listdistricts trees.csv listdistrictout
-
 ```
 
-We obtain the following result, it will show us all the districts:
+We obtain the following result, it will list all districts containing trees:
 ```
 -sh-4.2$ hdfs dfs -cat listdistrictout/part-r-00000
 11	1
@@ -101,29 +98,27 @@ We obtain the following result, it will show us all the districts:
 9	1
 ```
 
-
-
 ## 1.8.2 Show all existing species (very easy)
 
-We create *ListSpecies* which will show the list of the species from our input trees.
-It will implement a new mapper and the previous reducer.
+We created *ListSpecies* which displays the list of different trees species from the input file.
+It uses a new mapper and the previous reducer.
 
-By looking on the csv file, the species are on the fourth column. 
-For the mapper named *ListSpeciesMapper*,for each line, we will only return one information: the species as inputs for the reducer.
+By looking at the csv file, we see that the species are in the fourth column.
+For each line, the mapper called *ListSpeciesMapper* only returns one information: the species as input key for the reducer (and the arbitrary value 1).
 
 For the reducer and combiner we reused *ListReducer*.
 
-In *ListSpecies* , we will specify that we used *ListSpeciesMapper* as mapper and *ListReducer* as combiner and reducer.
+In *ListSpecies*, we specify that we use *ListSpeciesMapper* as mapper and *ListReducer* as combiner and reducer.
 
-And we will call our *ListSpeciesMapper*  in the AppDriver in order to be able to run it.
+And we call our *ListSpecies* in the AppDriver in order to be able to run it.
 
-Now let's take a look on our output.
-First we run : 
+Now let's take a look at the output.
+First we run:
 ```
 -sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar listspecies trees.csv listspeciesout
 ```
 
-And we obtain :
+And we obtain:
 ```
 -sh-4.2$ hdfs dfs -cat listspeciesout/part-r-00000
 araucana	1
@@ -173,27 +168,28 @@ virginiana	1
 x acerifolia	1
 ```
 
-### 1.8.3 Number of trees by species (easy)
+## 1.8.3 Number of trees by species (easy)
+
 For this job, we need to calculate the number of trees for each species.
-We can reuse the previous question which shows the species for this job.
+We can reuse the previous question which displays the list of species.
 
-Firstly, We create *CountSpecies* which will show the the number of trees by species.
+Firstly, we created *CountSpecies* which should display the number of trees by species.
 
-For the mapper, we will reuse *ListSpeciesMapper*, which will return the species as inputs for the reducer.
+For the mapper, we reused *ListSpeciesMapper*, which returns the species as input keys for the reducer.
 
-For the reducer and combiner we reused *IntSumReducer* which was given with the wordcount which will combine and count the occurencies.
+For the reducer and combiner we reused *IntSumReducer* which was given with the wordcount, it combines the keys and counts their occurence.
 
-In *CountSpecies* , we will specify that we used *ListSpeciesMapper* as mapper and *IntSumReducer* as combiner and reducer.
+In *CountSpecies*, we specify that we use *ListSpeciesMapper* as mapper and *IntSumReducer* as combiner and reducer.
 
-And we will call our *CountSpecies*  in the AppDriver in order to be able to run it.
+And we call our *CountSpecies* in the AppDriver in order to be able to run it.
 
-Now let's take a look on our output.
-First we run :
+Now let's take a look at the output.
+First we run:
 ```
 -sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar countspecies trees.csv countspeciesout
 ```
 
-We will obtain:
+We obtain:
 ```
 -sh-4.2$ hdfs dfs -cat countspeciesout/part-r-00000
 araucana	1
@@ -243,27 +239,27 @@ virginiana	2
 x acerifolia	11
 ```
 
-### 1.8.4 Maximum height per specie of tree (average)
+## 1.8.4 Maximum height per specie of tree (average)
 
-We create *TallestSpecies* which will show the tallest tree of each species.
-It will implement a new mapper and a new reducer.
+We created *TallestSpecies* which calculates the height of the tallest tree of each species.
+It implements a new mapper and a new reducer.
 
-For the mapper named *TallestSpeciesMapper*, we will focus on two information: we will use the species as a key and the height as the value for our key value couple. 
+For the mapper named *TallestSpeciesMapper*, we focus on two information: we need the species as a key and the height as a value for our key value couple.
 
-For the reducer and combiner called *MaxReducer*, we will focus on the maximum height of each species. For each key, we will compare our current height with the maximum and while change if needed. 
-We will return the key with the maximum value.
+For the reducer and combiner called *MaxReducer*, we focus on the maximum height of each species. For each key, we compare each height with the current maximum and change it if the height read is bigger.
+We return the key with the corresponding maximum value of height.
 
-In *TallestSpecies* , we will specify that we used *TallestSpeciesMapper* as mapper and *MaxReducer* as combiner and reducer.
+In *TallestSpecies*, we specify that we use *TallestSpeciesMapper* as mapper and *MaxReducer* as combiner and reducer.
 
-Finally, we will have to call our *TallestSpecies*  in the AppDriver in order to be able to run it.
+Finally, we call our *TallestSpecies* in the AppDriver in order to be able to run it.
 
-Now let's take a look on our output.
-First we run :
+Now let's take a look at the output.
+First we run:
 ```
 -sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar tallestspecies trees.csv tallestspeciesout
 ```
 
-We will obtain:
+We obtain:
 ```
 -sh-4.2$ hdfs dfs -cat tallestspeciesout/part-r-00000
 araucana	9.0
