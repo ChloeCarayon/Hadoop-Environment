@@ -9,7 +9,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.opstty.DistrictYearWritable;
+import com.opstty.DoubleIntWritable;
 import com.opstty.mapper.DistrictOldestMapper;
 import com.opstty.reducer.OldestReducer;
 
@@ -27,7 +27,7 @@ public class DistrictOldest {
         // job.setCombinerClass(OldestReducer.class);
         job.setReducerClass(OldestReducer.class);
         job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(DistrictYearWritable.class);
+        job.setMapOutputValueClass(DoubleIntWritable.class);
         job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(NullWritable.class);
         for (int i = 0; i < otherArgs.length - 1; ++i) {

@@ -6,13 +6,13 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-import com.opstty.DistrictYearWritable;
+import com.opstty.DoubleIntWritable;
 
-public class DistrictOldestMapper extends Mapper<Object, Text, IntWritable, DistrictYearWritable> {
+public class DistrictOldestMapper extends Mapper<Object, Text, IntWritable, DoubleIntWritable> {
     private final static IntWritable one = new IntWritable(1);
     private final static IntWritable district = new IntWritable();
     private final static IntWritable year = new IntWritable();
-    private final static DistrictYearWritable districtYear = new DistrictYearWritable();
+    private final static DoubleIntWritable districtYear = new DoubleIntWritable();
 
     public void map(Object key, Text value, Context context)
             throws IOException, InterruptedException {
@@ -21,8 +21,8 @@ public class DistrictOldestMapper extends Mapper<Object, Text, IntWritable, Dist
         if (!line[0].toString().equals("GEOPOINT") && !line[5].equals("")) {
     		district.set(Integer.parseInt(line[1]));
     		year.set(Integer.parseInt(line[5]));
-    		districtYear.setDistrict(district);
-    		districtYear.setYear(year);
+    		districtYear.setVal1(district);
+    		districtYear.setVal2(year);
     		
         	context.write(one, districtYear);
         }
