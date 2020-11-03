@@ -24,8 +24,11 @@ public class DistrictOldest {
         Job job = Job.getInstance(conf, "districtoldest");
         job.setJarByClass(DistrictOldest.class);
         job.setMapperClass(DistrictOldestMapper.class);
+        // input and output of the reducer are from different class
+        // we have to erase the combiner
         // job.setCombinerClass(OldestReducer.class);
         job.setReducerClass(OldestReducer.class);
+        // specify class of key value couple
         job.setMapOutputKeyClass(IntWritable.class);
         job.setMapOutputValueClass(DoubleIntWritable.class);
         job.setOutputKeyClass(IntWritable.class);
