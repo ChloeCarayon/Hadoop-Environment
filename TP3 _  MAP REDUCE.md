@@ -9,7 +9,42 @@
 
 In this TP, we have to create our own MapReduce programs in Java.
 
-But firstly, we need to import the csv file in the cluster:
+Firstly, we want to import the jar. To do so, we add the Maven dependency, and obtain the build success message:
+```
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  54.884 s
+[INFO] Finished at: 2020-10-30T08:37:20+01:00
+[INFO] ------------------------------------------------------------------------
+```
+It generate two jar and I select the one with dependencies.
+
+Let's import it in the cluster:
+```
+Chloe-Macbook-4:~ chloe$ cd Documents/DATASCIENCE/hadoop-examples-mapreduce/target
+Chloe-Macbook-4:target chloe$ scp hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar ccarayon@hadoop-edge01.efrei.online:/home/ccarayon/
+Welcome to EFREI Hadoop Cluster
+
+Password: 
+hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-wi 100%   51MB   2.3MB/s   00:22   
+```
+
+Now if we look into the cluster in our space, we can see it:
+```
+-sh-4.2$ ls
+hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar  MapReduce1
+```
+
+We will run the job: 
+```
+-sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar 
+An example program must be given as the first argument.
+Valid program names are:
+  wordcount: A map/reduce program that counts the words in the input files.
+```
+
+Then, we need to import the csv file in the cluster:
 ```
 -sh-4.2$ hdfs dfs -put tree.csv
 ```
@@ -308,3 +343,155 @@ ulmoides	12.0
 virginiana	14.0
 x acerifolia	45.0
 ```
+
+## 1.8.5 Sort the trees height from smallest to largest (average)
+
+We created *SortHeight* which will sort the trees height from the smallest to the largest. 
+It implements a new mapper and a new reducer.
+
+For the mapper named *SortHeightMapper*, we focus on two information: we will take the height (as a float) of the tree as a key and 1 as value. 
+
+For the reducer and combiner called *SortReducer*, we have key as float so it will order the trees by itself. We add a for loop to write all the key.
+
+For this part, we had to specify in each java class that we use floatWritable and not Text as we have input and output key which are float.
+
+In *SortHeight*, we specify that we use *SortHeightMapper* as mapper and *SortReducer* as combiner and reducer.
+
+Finally, we call our *SortHeight* in the AppDriver in order to be able to run it.
+
+Now let's take a look at the output.
+First we run:
+```
+-sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar sortheight trees.csv sortheightout
+```
+
+And we obtain:
+``` 
+-sh-4.2$ hdfs dfs -cat sortheightout/part-r-00000
+2.0	1
+5.0	1
+6.0	1
+9.0	1
+10.0	1
+10.0	1
+10.0	1
+10.0	1
+10.0	1
+11.0	1
+12.0	1
+12.0	1
+12.0	1
+12.0	1
+12.0	1
+12.0	1
+12.0	1
+12.0	1
+13.0	1
+13.0	1
+14.0	1
+14.0	1
+14.0	1
+15.0	1
+15.0	1
+15.0	1
+15.0	1
+15.0	1
+16.0	1
+16.0	1
+16.0	1
+16.0	1
+18.0	1
+18.0	1
+18.0	1
+18.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+20.0	1
+22.0	1
+22.0	1
+22.0	1
+22.0	1
+22.0	1
+23.0	1
+25.0	1
+25.0	1
+25.0	1
+25.0	1
+25.0	1
+25.0	1
+26.0	1
+27.0	1
+27.0	1
+27.0	1
+28.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+30.0	1
+31.0	1
+31.0	1
+32.0	1
+33.0	1
+34.0	1
+35.0	1
+35.0	1
+35.0	1
+35.0	1
+35.0	1
+40.0	1
+40.0	1
+40.0	1
+42.0	1
+45.0	1
+``` 
+
+// id localisation 
+
+
+## 1.8.6 District containing the oldest tree (difficult)
+
+This time, we have to create our own Writable subclass called *DistrictYearWritable*, we will create two IntWritable attributs district and year and their methods. Moreover, we will have to instance the specific methods of writable classes : readfiles and X.
+Thank to this 
+
+We created *SortHeight* which willdisplay the district of the oldest tree.
+It implements a new mapper and a new reducer.
+
+For the mapper named **, we will take two information: one unique value for the key and our new writable for the value which will countain.
+
+For the reducer and combiner called **, we will 
+
+By having only one key it will give us as output only one result.
+
+For this part, we had to specify in each java class that we use DistrictYearWritable and not Text as we have input and output key which are float.
+
+In *SortHeight*, we specify that we use *SortHeightMapper* as mapper and *SortReducer* as combiner and reducer.
+
+Finally, we call our *SortHeight* in the AppDriver in order to be able to run it.
+
+Now let's take a look at the output.
+First we run:
+
+
+// combiner 
