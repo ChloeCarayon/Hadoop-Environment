@@ -18,9 +18,9 @@ public class AppDriver {
             programDriver.addClass("wordcount", WordCount.class,
                     "A map/reduce program that counts the words in the input files.");
             programDriver.addClass("listdistricts", ListDistrics.class,
-                    "A map/reduce program that displays the list of districts in the input files.");
+                    "A map/reduce program that displays the list of districts containing trees in the input files.");
             programDriver.addClass("listspecies", ListSpecies.class,
-                    "A map/reduce program that displays the list of species in the input files.");
+                    "A map/reduce program that displays the list of tree species in the input files.");
             programDriver.addClass("countspecies", CountSpecies.class,
                     "A map/reduce program that counts the number of trees of each species in the input files.");
             programDriver.addClass("tallestspecies", TallestSpecies.class,

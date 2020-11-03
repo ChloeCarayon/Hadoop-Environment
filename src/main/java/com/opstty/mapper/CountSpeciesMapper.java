@@ -2,11 +2,12 @@ package com.opstty.mapper;
 
 import java.io.IOException;
 
-import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class ListSpeciesMapper extends Mapper<Object, Text, Text, NullWritable> {
+public class CountSpeciesMapper extends Mapper<Object, Text, Text, IntWritable> {
+	private final static IntWritable one = new IntWritable(1);
     private Text species = new Text();
 
     public void map(Object key, Text value, Context context)
@@ -15,7 +16,7 @@ public class ListSpeciesMapper extends Mapper<Object, Text, Text, NullWritable> 
         // do not take into account the header
         if (!line[0].toString().equals("GEOPOINT")) {
         	species.set(line[3]);
-        	context.write(species, NullWritable.get());
+        	context.write(species, one);
         }
     }
 }

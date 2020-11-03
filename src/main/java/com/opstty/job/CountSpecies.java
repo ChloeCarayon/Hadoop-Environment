@@ -9,7 +9,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.opstty.mapper.ListSpeciesMapper;
+import com.opstty.mapper.CountSpeciesMapper;
 import com.opstty.reducer.IntSumReducer;
 
 public class CountSpecies {
@@ -22,7 +22,7 @@ public class CountSpecies {
         }
         Job job = Job.getInstance(conf, "countspecies");
         job.setJarByClass(CountSpecies.class);
-        job.setMapperClass(ListSpeciesMapper.class);
+        job.setMapperClass(CountSpeciesMapper.class);
         job.setCombinerClass(IntSumReducer.class);
         job.setReducerClass(IntSumReducer.class);
         job.setOutputKeyClass(Text.class);
