@@ -1,6 +1,7 @@
 package com.opstty;
 
 import com.opstty.job.CountSpecies;
+import com.opstty.job.DistrictMost;
 import com.opstty.job.DistrictOldest;
 import com.opstty.job.ListDistrics;
 import com.opstty.job.ListSpecies;
@@ -29,6 +30,8 @@ public class AppDriver {
                     "A map/reduce program that sorts the trees height from smallest to largest in the input files.");
             programDriver.addClass("districtoldest", DistrictOldest.class,
                     "A map/reduce program that displays the district where the oldest tree is in the input files.");
+            programDriver.addClass("districtmost", DistrictMost.class,
+                    "A map/reduce program that displays the district that contains the most trees in the input files.");
 
             exitCode = programDriver.run(argv);
         } catch (Throwable throwable) {
