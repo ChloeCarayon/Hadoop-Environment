@@ -48,6 +48,16 @@ public class DoubleIntWritable implements Writable {
 		val1.write(arg0);
 		val2.write(arg0);
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		DoubleIntWritable diw = (DoubleIntWritable) o;
+		if (this.val1.get() == diw.getVal1().get() &&
+				this.val2.get() == diw.getVal2().get()) {
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {
