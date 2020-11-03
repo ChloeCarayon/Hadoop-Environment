@@ -35,10 +35,8 @@ public class DistrictMost {
         for (int i = 0; i < otherArgs.length - 1; ++i) {
             FileInputFormat.addInputPath(job1, new Path(otherArgs[i]));
         }
-        // we create temp file to store the first MapReduce job
         FileOutputFormat.setOutputPath(job1,
                 new Path(otherArgs[otherArgs.length - 1], "temp"));
-        // wait
         job1.waitForCompletion(true);
         
         /* Job 2: get best (district number, number of trees) pair */
@@ -46,15 +44,12 @@ public class DistrictMost {
         Job job2 = Job.getInstance(conf2, "concatmax");
         job2.setJarByClass(DistrictMost.class);
         job2.setMapperClass(ConcatMapper.class);
-        // input and output of reducer are different : suppress combiner
         // job2.setCombinerClass(ConcatMaxReducer.class);
         job2.setReducerClass(ConcatMaxReducer.class);
-        // set the output of the mapper
         job2.setMapOutputKeyClass(IntWritable.class);
         job2.setMapOutputValueClass(DoubleIntWritable.class);
         job2.setOutputKeyClass(IntWritable.class);
         job2.setOutputValueClass(IntWritable.class);
-        // use job1 Mapreduce file
         FileInputFormat.addInputPath(job2,
         		new Path(otherArgs[otherArgs.length - 1], "temp"));
         FileOutputFormat.setOutputPath(job2,

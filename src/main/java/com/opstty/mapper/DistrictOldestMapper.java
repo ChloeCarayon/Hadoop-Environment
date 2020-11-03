@@ -23,8 +23,7 @@ public class DistrictOldestMapper extends Mapper<Object, Text, IntWritable, Doub
     		year.set(Integer.parseInt(line[5]));
     		districtYear.setVal1(district);
     		districtYear.setVal2(year);
-
-    		// all output will have the same key but different values
+    		
         	context.write(one, districtYear);
         }
     }

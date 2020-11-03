@@ -19,7 +19,7 @@ public class SortHeightMapper extends Mapper<Object, Text, FloatWritable, IntWri
     	    // height
     		height.set(Float.parseFloat(line[6]));
     		id.set(Integer.parseInt(line[11]));
-        	// our key value couple is for each tree : its height and its id
+        	// our key value couple is for each tree : its species and its height
         	context.write(height, id);
         }
     }
