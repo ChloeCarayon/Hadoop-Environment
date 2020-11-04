@@ -31,8 +31,8 @@ public class MaxReducerTest {
         FloatWritable v1 = new FloatWritable(32);
         FloatWritable v2 = new FloatWritable(21);
         FloatWritable v3 = new FloatWritable(42);
-        Iterable<FloatWritable> values = Arrays.asList(v1,v2,v3);
+        Iterable<FloatWritable> values = Arrays.asList(v1, v2, v3);
         this.maxReducer.reduce(new Text(key), values, this.context);
-        verify(this.context).write(new Text(key),new FloatWritable(42));
+        verify(this.context).write(new Text(key), new FloatWritable(42));
     }
 }

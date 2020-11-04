@@ -33,6 +33,6 @@ public class TallestSpeciesMapperTest {
         this.tallestSpeciesMapper.map(null, new Text(value), this.context);
 
         verify(this.context, times(1))
-                .write(new Text("pomifera"), new FloatWritable((float) 13.0));
+                .write(new Text("pomifera"), new FloatWritable(13));
     }
 }

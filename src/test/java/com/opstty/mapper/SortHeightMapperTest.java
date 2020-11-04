@@ -32,6 +32,6 @@ public class SortHeightMapperTest {
         this.sortHeightMapper.map(null, new Text(value), this.context);
 
         verify(this.context, times(1))
-                .write(new FloatWritable((float) 13.0), new IntWritable(6));
+                .write(new FloatWritable(13), new IntWritable(6));
     }
 }

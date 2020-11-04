@@ -12,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.io.IOException;
 import java.util.Arrays;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,9 +30,9 @@ public class SortReducerTest {
     public void testReduce() throws IOException, InterruptedException {
         float key = 13;
         IntWritable v1 = new IntWritable(12);
-        Iterable<IntWritable> values = Arrays.asList(v1);
+        Iterable<IntWritable> values = Arrays.asList(v1, v1, v1);
         this.sortReducer.reduce(new FloatWritable(key), values, this.context);
-        verify(this.context).write(new FloatWritable(key),v1);
+        verify(this.context, times(3))
+        		.write(new FloatWritable(key), v1);
     }
 }
-

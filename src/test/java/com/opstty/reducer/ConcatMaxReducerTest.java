@@ -28,11 +28,11 @@ public class ConcatMaxReducerTest {
     @Test
     public void testReduce() throws IOException, InterruptedException {
         int key = 1;
-        DoubleIntWritable v1 = new DoubleIntWritable(new IntWritable(12),new IntWritable(13));
-        DoubleIntWritable v2 = new DoubleIntWritable(new IntWritable(11),new IntWritable(2));
-        DoubleIntWritable v3 = new DoubleIntWritable(new IntWritable(9),new IntWritable(17));
-        Iterable<DoubleIntWritable> values = Arrays.asList(v1,v2,v3);
+        DoubleIntWritable v1 = new DoubleIntWritable(new IntWritable(12), new IntWritable(13));
+        DoubleIntWritable v2 = new DoubleIntWritable(new IntWritable(11), new IntWritable(2));
+        DoubleIntWritable v3 = new DoubleIntWritable(new IntWritable(9), new IntWritable(17));
+        Iterable<DoubleIntWritable> values = Arrays.asList(v1, v2, v3);
         this.concatMaxReducer.reduce(new IntWritable(key), values, this.context);
-        verify(this.context).write(new IntWritable(9),new IntWritable(17));
+        verify(this.context).write(new IntWritable(9), new IntWritable(17));
     }
 }

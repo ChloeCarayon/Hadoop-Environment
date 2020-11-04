@@ -29,8 +29,8 @@ public class ListReducerTest {
     public void testReduce() throws IOException, InterruptedException {
         String key = "key";
         NullWritable value = NullWritable.get();
-        Iterable<NullWritable> values = Arrays.asList(value,value,value);
+        Iterable<NullWritable> values = Arrays.asList(value, value, value);
         this.listReducer.reduce(new Text(key), values, this.context);
-        verify(this.context).write(new Text(key),NullWritable.get());
+        verify(this.context).write(new Text(key), NullWritable.get());
     }
 }

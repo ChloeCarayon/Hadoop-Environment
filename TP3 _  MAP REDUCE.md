@@ -10,18 +10,18 @@
 In this TP, we have to create our own MapReduce programs in Java.
 
 Firstly, we have to import the jar in the cluster. We will do it again to store new MapReduce programs.
-By building Maven, we get jar and import it in our cluster. 
+By building Maven, we get jar and import it in our cluster.
 ```
 $ scp hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar ccarayon@hadoop-edge01.efrei.online:/home/ccarayon/
 Welcome to EFREI Hadoop Cluster
 
-Password: 
-hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-wi 100%   51MB   2.3MB/s   00:22   
+Password:
+hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-wi 100%   51MB   2.3MB/s   00:22
 ```
 
-By running *wordcount*, we obtain: 
+By running *wordcount*, we obtain:
 ```
--sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar 
+-sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar
 An example program must be given as the first argument.
 Valid program names are:
   wordcount: A map/reduce program that counts the words in the input files.
@@ -190,7 +190,7 @@ x acerifolia
 
 ## 1.8.3 Number of trees by species (easy)
 
-### 1.8.3.1 Implementation 
+### 1.8.3.1 Implementation
 
 For this job, we need to calculate the number of trees for each species.
 We can reuse the previous question which displays the list of species.
@@ -338,10 +338,10 @@ x acerifolia	45.0
 
 ### 1.8.5.1 Implementation
 
-We create *SortHeight* to sort the trees height from the smallest to the largest. 
+We create *SortHeight* to sort the trees height from the smallest to the largest.
 It implements a new mapper and a new reducer.
 
-For the mapper *SortHeightMapper*, we focus on two information: we will take the height (as a float) of the tree as a key and the id (an int) as value. 
+For the mapper *SortHeightMapper*, we focus on two information: we will take the height (as a float) of the tree as a key and the id (an int) as value.
 For the reducer and combiner called *SortReducer*, we have key as float so it will order the trees by itself. We add a for loop to write all the key value couple.
 For this part, we had to specify in those class that we use floatWritable and not Text as we have input and output key which are float.
 
@@ -357,7 +357,7 @@ We run:
 ```
 
 And we obtain:
-``` 
+```
 -sh-4.2$ hdfs dfs -cat sortheightout/part-r-00000
 
 2.0	3
@@ -456,26 +456,26 @@ And we obtain:
 40.0	40
 42.0	90
 45.0	21
-``` 
+```
 
 
 ## 1.8.6 District containing the oldest tree (difficult)
 
-### 1.8.6.1 Implementation 
+### 1.8.6.1 Implementation
 
 This time, we have to create our own Writable subclass *DoubleIntWritable*, we create two IntWritable attributs val1 for district and val2 for year, their methods and the specific methods of writable classes : readfields and write.
-The purpose of this custom writable class is to be able to have 2 attributs for the value in the key value couple in order to do comparison in the reducer. 
+The purpose of this custom writable class is to be able to have 2 attributs for the value in the key value couple in order to do comparison in the reducer.
 
 Then we create *SortHeight* to display the district of the oldest tree.
 It implements a new mapper and a new reducer.
 
-For the mapper *DistrictOldest*, we had to be carefull by taking as value output : DoubleIntWritable. 
-If we are not in the header, we will set val1 to district (2nd column) and val2 to year (6th column) which will be the two attributs of our DoubleIntWritable object. 
+For the mapper *DistrictOldest*, we had to be carefull by taking as value output : DoubleIntWritable.
+If we are not in the header, we will set val1 to district (2nd column) and val2 to year (6th column) which will be the two attributs of our DoubleIntWritable object.
 Our outputs will be on the form: an IntWritable ( of value 1) for the key and the DoubleIntWritable object as the value.
 By doing this, all our values will be store with only one key and we will be able to compare them in the reducer and return only one element.
 
-For the reducer *OldestReducer*, we compare the year thanks to a for loop going through the values, and return the minimum one. 
-We will have to specify that we have IntWritable and DoubleIntWritable as input and IntWritable and NullWritable as output. 
+For the reducer *OldestReducer*, we compare the year thanks to a for loop going through the values, and return the minimum one.
+We will have to specify that we have IntWritable and DoubleIntWritable as input and IntWritable and NullWritable as output.
 This difference between the input and output class bring us some issues:
 As the output from the Mapper was different from the input of the combiner and the reducer, we had to supress the combiner from DistrictOldest job and we had to specify the MapOutputKey class and MapOutputValue class.
 In *DistrictOldest*, we specify that we use *SortHeightMapper* as mapper and *SortReducer* as reducer.
@@ -488,7 +488,7 @@ We run:
 -sh-4.2$ yarn jar  hadoop-examples-mapreduce-1.0-SNAPSHOT-jar-with-dependencies.jar  districtoldest trees.csv oldestout
 ```
 
-We obtain: 
+We obtain:
 
 ```
 -sh-4.2$ hdfs dfs -cat oldestout/part-r-00000
@@ -506,21 +506,21 @@ For this last exercise, we have to do two MapReduce phases as we want to display
 Firstly, we count the number of trees per district.
 For the mapper, we create *CountDistrictsMapper* which gives the list of districts containing trees with district as key and 1 as value.
 Then using *IntSumReducer*, we concatenate and reduce, it returns the district as key and the sum of its values ( number of trees) as value.
- 
+
 ### Concatenate
-Then, we have to find the district containing the most trees. 
+Then, we have to find the district containing the most trees.
 For the mapper *ConcatMapper*, we take the output of the first job and as we want to compare several information and return only one element, we reused what we have done in the previous exercise, the custom writable class.
 We save the values of the district and number of trees as attributs of an object of our class *DoubleIntWritable*.
 So our outputs for the Mapper are on the form: an IntWritable  ( of value 1) for the key and a DoubleIntWritable object as the value.
 
-For the reducer *ConcatMaxReducer*, we compare the different values of the key to return the maximum one. 
-As the value of the key value couple, is a DoubleIntWritable object, we compare the attribut number of trees and keep the maximum one and its district. 
+For the reducer *ConcatMaxReducer*, we compare the different values of the key to return the maximum one.
+As the value of the key value couple, is a DoubleIntWritable object, we compare the attribut number of trees and keep the maximum one and its district.
 As output, we only return the district.
 
 ### The Job class DistrictMost
-The Job class *DistrictMost* was tricky. 
-In fact, we had to create two jobs in one class knowing that the output of the first job would be the input of the second one. 
-We store the result of the first job in a file called *temp* and we use it for the second one as an input. 
+The Job class *DistrictMost* was tricky.
+In fact, we had to create two jobs in one class knowing that the output of the first job would be the input of the second one.
+We store the result of the first job in a file called *temp* and we use it for the second one as an input.
 As in the previous exercise, for the second job, we didn't use a combiner as we have different input and output for the reducer and we will have to set the output key and value class for the mapper.
 
 
@@ -570,4 +570,4 @@ And the final result *out*:
 ```
 
 
-## Conclusion 
+## Conclusion
