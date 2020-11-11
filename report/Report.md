@@ -47,7 +47,9 @@ We obtain this result:
 
 Our mission is to create several MapReduce programs as the wordcount example.
 By looking at the intial project:
+
 ![](https://i.imgur.com/WJiAFuh.png)
+
 We understand that we have jobs that use mappers and reducers.
 In order to create new jobs, we have to create new mappers and reducers, use them in the corresponding job and include the jobs in the AppDriver to be able to run them.
 To test them, we implemented *UnitTests*.
@@ -118,6 +120,8 @@ For the reducer and combiner we reuse *ListReducer*.
 
 In *ListKinds*, we specify that we use *ListKindsMapper* as mapper and *ListReducer* as combiner and reducer.
 And we call our *ListKinds* in the AppDriver in order to be able to run it.
+
+<br/><br/>
 
 ### 1.8.2.2 Commands and result
 
@@ -421,7 +425,7 @@ And we obtain:
 ```
 
 
-## 1.8.6 District containing the oldest tree 
+## 1.8.6 District containing the oldest tree
 
 ### 1.8.6.1 Implementation
 
@@ -468,6 +472,8 @@ For this last exercise, we have to do two MapReduce phases as we want to display
 Firstly, we count the number of trees per district.
 For the mapper, we create *CountDistrictsMapper* which gives the list of districts containing trees with district as key and 1 as value.
 Then using *IntSumReducer*, we concatenate and reduce, it returns the district as key and the sum of its values (number of trees) as value.
+
+<br/><br/>
 
 #### Concatenate
 Then, we have to find the district containing the most trees.
@@ -524,7 +530,6 @@ The intermediate result *temp*:
 9	1
 ```
 
-
 And the final result *out*:
 ```
 -sh-4.2$ hdfs dfs -cat mostout/out/part-r-00000
@@ -536,4 +541,4 @@ And the final result *out*:
 
 Thanks to this project, we learned how to create and implement our own MapReduce Jobs and use them in the cluster.
 We also made UnitTests with JUnit for the first time to check our implementation.
-Doing our own MapReduce Jobs was fastidious. We know that there are other frameworks and technologies that are easier and faster to perform this task, but it was instructive to build it from scratch. 
+Doing our own MapReduce Jobs was fastidious. We know that there are other frameworks and technologies that are easier and faster to perform this task, but it was instructive to build it from scratch.
