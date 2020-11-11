@@ -9,20 +9,20 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.opstty.mapper.TallestSpeciesMapper;
+import com.opstty.mapper.TallestKindsMapper;
 import com.opstty.reducer.MaxReducer;
 
-public class TallestSpecies {
+public class TallestKinds {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (otherArgs.length < 2) {
-            System.err.println("Usage: tallestspecies <in> [<in>...] <out>");
+            System.err.println("Usage: tallestkinds <in> [<in>...] <out>");
             System.exit(2);
         }
-        Job job = Job.getInstance(conf, "tallestspecies");
-        job.setJarByClass(TallestSpecies.class);
-        job.setMapperClass(TallestSpeciesMapper.class);
+        Job job = Job.getInstance(conf, "tallestkinds");
+        job.setJarByClass(TallestKinds.class);
+        job.setMapperClass(TallestKindsMapper.class);
         job.setCombinerClass(MaxReducer.class);
         job.setReducerClass(MaxReducer.class);
         job.setOutputKeyClass(Text.class);

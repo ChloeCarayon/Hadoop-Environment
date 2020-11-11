@@ -1,11 +1,7 @@
 package com.opstty.mapper;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-
-import java.io.IOException;
-
-import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.FloatWritable;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.junit.Before;
@@ -14,23 +10,29 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.io.IOException;
+
+import static org.mockito.Matchers.floatThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
 @RunWith(MockitoJUnitRunner.class)
-public class ListSpeciesMapperTest {
+public class TallestKindsMapperTest {
     @Mock
     private Mapper.Context context;
-    private ListSpeciesMapper listSpeciesMapper;
+    private TallestKindsMapper tallestKindsMapper;
 
     @Before
     public void setup() {
-        this.listSpeciesMapper = new ListSpeciesMapper();
+        this.tallestKindsMapper = new TallestKindsMapper();
     }
 
     @Test
     public void testMap() throws IOException, InterruptedException {
         String value = "(48.857140829, 2.29533455314);7;Maclura;pomifera;Moraceae;1935;13.0;;Quai Branly, avenue de La Motte-Piquet, avenue de la Bourdonnais, avenue de Suffren;Oranger des Osages;;6;Parc du Champs de Mars";
-        this.listSpeciesMapper.map(null, new Text(value), this.context);
-        
+        this.tallestKindsMapper.map(null, new Text(value), this.context);
+
         verify(this.context, times(1))
-                .write(new Text("pomifera"), NullWritable.get());
+                .write(new Text("Maclura"), new FloatWritable(13));
     }
 }

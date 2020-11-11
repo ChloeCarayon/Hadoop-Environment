@@ -9,20 +9,20 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.opstty.mapper.ListSpeciesMapper;
+import com.opstty.mapper.ListKindsMapper;
 import com.opstty.reducer.ListReducer;
 
-public class ListSpecies {
+public class ListKinds {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (otherArgs.length < 2) {
-            System.err.println("Usage: listspecies <in> [<in>...] <out>");
+            System.err.println("Usage: listkinds <in> [<in>...] <out>");
             System.exit(2);
         }
-        Job job = Job.getInstance(conf, "listspecies");
-        job.setJarByClass(ListSpecies.class);
-        job.setMapperClass(ListSpeciesMapper.class);
+        Job job = Job.getInstance(conf, "listkinds");
+        job.setJarByClass(ListKinds.class);
+        job.setMapperClass(ListKindsMapper.class);
         job.setCombinerClass(ListReducer.class);
         job.setReducerClass(ListReducer.class);
         job.setOutputKeyClass(Text.class);

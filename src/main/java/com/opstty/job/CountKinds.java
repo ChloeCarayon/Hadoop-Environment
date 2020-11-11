@@ -9,20 +9,20 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-import com.opstty.mapper.CountSpeciesMapper;
+import com.opstty.mapper.CountKindsMapper;
 import com.opstty.reducer.IntSumReducer;
 
-public class CountSpecies {
+public class CountKinds {
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
         String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
         if (otherArgs.length < 2) {
-            System.err.println("Usage: countspecies <in> [<in>...] <out>");
+            System.err.println("Usage: countkinds <in> [<in>...] <out>");
             System.exit(2);
         }
-        Job job = Job.getInstance(conf, "countspecies");
-        job.setJarByClass(CountSpecies.class);
-        job.setMapperClass(CountSpeciesMapper.class);
+        Job job = Job.getInstance(conf, "countkinds");
+        job.setJarByClass(CountKinds.class);
+        job.setMapperClass(CountKindsMapper.class);
         job.setCombinerClass(IntSumReducer.class);
         job.setReducerClass(IntSumReducer.class);
         job.setOutputKeyClass(Text.class);
