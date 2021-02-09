@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>
+        TP6: Apache HBase - HackMD
+    </title>
+    <link rel="icon" type="image/png" href="https://hackmd.io/favicon.png">
+    <link rel="apple-touch-icon" href="https://hackmd.io/apple-touch-icon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css" integrity="sha256-3iu9jgsy9TpTwXKb7bNQzqWekRX7pPK+2OLj3R922fo=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.5.0/octicons.min.css" integrity="sha256-QiWfLIsCT02Sdwkogf6YMiQlj4NE84MKkzEMkZnMGdg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.5.1/themes/prism.min.css" integrity="sha256-vtR0hSWRc3Tb26iuN2oZHt3KRUomwTufNIf5/4oeCyg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@hackmd/emojify.js@2.1.0/dist/css/basic/emojify.min.css" integrity="sha256-UOrvMOsSDSrW6szVLe8ZDZezBxh5IoIfgTwdNDgTjiU=" crossorigin="anonymous" />
+    <style>
+        @charset "UTF-8";@import url(https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i|Source+Code+Pro:300,400,500|Source+Sans+Pro:300,300i,400,400i,600,600i|Source+Serif+Pro&subset=latin-ext);.hljs{display:block;background:#fff;padding:.5em;color:#333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-emphasis,.hljs-quote,.hljs-string,.hljs-strong,.hljs-template-variable,.hljs-variable{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-attribute,.hljs-bullet,.hljs-literal,.hljs-number,.hljs-symbol{color:#0086b3}.hljs-built_in,.hljs-builtin-name{color:#005cc5}.hljs-name,.hljs-section{color:#63a35c}.hljs-tag{color:#333}.hljs-attr,.hljs-selector-attr,.hljs-selector-class,.hljs-selector-id,.hljs-selector-pseudo,.hljs-title{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}.markdown-body{font-size:16px;line-height:1.5;word-wrap:break-word}.markdown-body:after,.markdown-body:before{display:table;content:""}.markdown-body:after{clear:both}.markdown-body>:first-child{margin-top:0!important}.markdown-body>:last-child{margin-bottom:0!important}.markdown-body a:not([href]){color:inherit;text-decoration:none}.markdown-body .absent{color:#c00}.markdown-body .anchor{float:left;padding-right:4px;margin-left:-20px;line-height:1}.markdown-body .anchor:focus{outline:none}.markdown-body blockquote,.markdown-body dl,.markdown-body ol,.markdown-body p,.markdown-body pre,.markdown-body table,.markdown-body ul{margin-top:0;margin-bottom:16px}.markdown-body hr{height:.25em;padding:0;margin:24px 0;background-color:#e7e7e7;border:0}.markdown-body blockquote{font-size:16px;padding:0 1em;color:#777;border-left:.25em solid #ddd}.markdown-body blockquote>:first-child{margin-top:0}.markdown-body blockquote>:last-child{margin-bottom:0}.markdown-body kbd,.popover kbd{display:inline-block;padding:3px 5px;font-size:11px;line-height:10px;color:#555;vertical-align:middle;background-color:#fcfcfc;border:1px solid #ccc;border-bottom-color:#bbb;border-radius:3px;box-shadow:inset 0 -1px 0 #bbb}.markdown-body .loweralpha{list-style-type:lower-alpha}.markdown-body h1,.markdown-body h2,.markdown-body h3,.markdown-body h4,.markdown-body h5,.markdown-body h6{margin-top:24px;margin-bottom:16px;font-weight:600;line-height:1.25}.markdown-body h1 .octicon-link,.markdown-body h2 .octicon-link,.markdown-body h3 .octicon-link,.markdown-body h4 .octicon-link,.markdown-body h5 .octicon-link,.markdown-body h6 .octicon-link{color:#000;vertical-align:middle;visibility:hidden}.markdown-body h1:hover .anchor,.markdown-body h2:hover .anchor,.markdown-body h3:hover .anchor,.markdown-body h4:hover .anchor,.markdown-body h5:hover .anchor,.markdown-body h6:hover .anchor{text-decoration:none}.markdown-body h1:hover .anchor .octicon-link,.markdown-body h2:hover .anchor .octicon-link,.markdown-body h3:hover .anchor .octicon-link,.markdown-body h4:hover .anchor .octicon-link,.markdown-body h5:hover .anchor .octicon-link,.markdown-body h6:hover .anchor .octicon-link{visibility:visible}.markdown-body h1 code,.markdown-body h1 tt,.markdown-body h2 code,.markdown-body h2 tt,.markdown-body h3 code,.markdown-body h3 tt,.markdown-body h4 code,.markdown-body h4 tt,.markdown-body h5 code,.markdown-body h5 tt,.markdown-body h6 code,.markdown-body h6 tt{font-size:inherit}.markdown-body h1{font-size:2em}.markdown-body h1,.markdown-body h2{padding-bottom:.3em;border-bottom:1px solid #eee}.markdown-body h2{font-size:1.5em}.markdown-body h3{font-size:1.25em}.markdown-body h4{font-size:1em}.markdown-body h5{font-size:.875em}.markdown-body h6{font-size:.85em;color:#777}.markdown-body ol,.markdown-body ul{padding-left:2em}.markdown-body ol.no-list,.markdown-body ul.no-list{padding:0;list-style-type:none}.markdown-body ol ol,.markdown-body ol ul,.markdown-body ul ol,.markdown-body ul ul{margin-top:0;margin-bottom:0}.markdown-body li>p{margin-top:16px}.markdown-body li+li{padding-top:.25em}.markdown-body dl{padding:0}.markdown-body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}.markdown-body dl dd{padding:0 16px;margin-bottom:16px}.markdown-body table{display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}.markdown-body table th{font-weight:700}.markdown-body table td,.markdown-body table th{padding:6px 13px;border:1px solid #ddd}.markdown-body table tr{background-color:#fff;border-top:1px solid #ccc}.markdown-body table tr:nth-child(2n){background-color:#f8f8f8}.markdown-body img{max-width:100%;box-sizing:content-box;background-color:#fff}.markdown-body img[align=right]{padding-left:20px}.markdown-body img[align=left]{padding-right:20px}.markdown-body .emoji{max-width:none;vertical-align:text-top;background-color:transparent}.markdown-body span.frame{display:block;overflow:hidden}.markdown-body span.frame>span{display:block;float:left;width:auto;padding:7px;margin:13px 0 0;overflow:hidden;border:1px solid #ddd}.markdown-body span.frame span img{display:block;float:left}.markdown-body span.frame span span{display:block;padding:5px 0 0;clear:both;color:#333}.markdown-body span.align-center{display:block;overflow:hidden;clear:both}.markdown-body span.align-center>span{display:block;margin:13px auto 0;overflow:hidden;text-align:center}.markdown-body span.align-center span img{margin:0 auto;text-align:center}.markdown-body span.align-right{display:block;overflow:hidden;clear:both}.markdown-body span.align-right>span{display:block;margin:13px 0 0;overflow:hidden;text-align:right}.markdown-body span.align-right span img{margin:0;text-align:right}.markdown-body span.float-left{display:block;float:left;margin-right:13px;overflow:hidden}.markdown-body span.float-left span{margin:13px 0 0}.markdown-body span.float-right{display:block;float:right;margin-left:13px;overflow:hidden}.markdown-body span.float-right>span{display:block;margin:13px auto 0;overflow:hidden;text-align:right}.markdown-body code,.markdown-body tt{padding:0;padding-top:.2em;padding-bottom:.2em;margin:0;font-size:85%;background-color:rgba(0,0,0,.04);border-radius:3px}.markdown-body code:after,.markdown-body code:before,.markdown-body tt:after,.markdown-body tt:before{letter-spacing:-.2em;content:"\00a0"}.markdown-body code br,.markdown-body tt br{display:none}.markdown-body del code{text-decoration:inherit}.markdown-body pre{word-wrap:normal}.markdown-body pre>code{padding:0;margin:0;font-size:100%;word-break:normal;white-space:pre;background:transparent;border:0}.markdown-body .highlight{margin-bottom:16px}.markdown-body .highlight pre{margin-bottom:0;word-break:normal}.markdown-body .highlight pre,.markdown-body pre{padding:16px;overflow:auto;font-size:85%;line-height:1.45;background-color:#f7f7f7;border-radius:3px}.markdown-body pre code,.markdown-body pre tt{display:inline;max-width:auto;padding:0;margin:0;overflow:visible;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}.markdown-body pre code:after,.markdown-body pre code:before,.markdown-body pre tt:after,.markdown-body pre tt:before{content:normal}.markdown-body .csv-data td,.markdown-body .csv-data th{padding:5px;overflow:hidden;font-size:12px;line-height:1;text-align:left;white-space:nowrap}.markdown-body .csv-data .blob-line-num{padding:10px 8px 9px;text-align:right;background:#fff;border:0}.markdown-body .csv-data tr{border-top:0}.markdown-body .csv-data th{font-weight:700;background:#f8f8f8;border-top:0}.news .alert .markdown-body blockquote{padding:0 0 0 40px;border:0 none}.activity-tab .news .alert .commits,.activity-tab .news .markdown-body blockquote{padding-left:0}.task-list-item{list-style-type:none}.task-list-item label{font-weight:400}.task-list-item.enabled label{cursor:pointer}.task-list-item+.task-list-item{margin-top:3px}.task-list-item-checkbox{float:left;margin:.31em 0 .2em -1.3em!important;vertical-align:middle;cursor:default!important}.markdown-body{padding-top:40px;padding-bottom:40px;max-width:758px;overflow:visible!important;position:relative}.markdown-body .emoji{vertical-align:top}.markdown-body pre{border:inherit!important}.markdown-body code{color:inherit!important}.markdown-body pre code .wrapper{display:-moz-inline-flex;display:-ms-inline-flex;display:-o-inline-flex;display:inline-flex}.markdown-body pre code .gutter{float:left;overflow:hidden;-webkit-user-select:none;user-select:none}.markdown-body pre code .gutter.linenumber{text-align:right;position:relative;display:inline-block;cursor:default;z-index:4;padding:0 8px 0 0;min-width:20px;box-sizing:content-box;color:#afafaf!important;border-right:3px solid #6ce26c!important}.markdown-body pre code .gutter.linenumber>span:before{content:attr(data-linenumber)}.markdown-body pre code .code{float:left;margin:0 0 0 16px}.markdown-body .gist .line-numbers{border-left:none;border-top:none;border-bottom:none}.markdown-body .gist .line-data{border:none}.markdown-body .gist table{border-spacing:0;border-collapse:inherit!important}.markdown-body code[data-gist-id]{background:none;padding:0}.markdown-body code[data-gist-id]:after,.markdown-body code[data-gist-id]:before{content:""}.markdown-body code[data-gist-id] .blob-num{border:unset}.markdown-body code[data-gist-id] table{overflow:unset;margin-bottom:unset}.markdown-body code[data-gist-id] table tr{background:unset}.markdown-body[dir=rtl] pre{direction:ltr}.markdown-body[dir=rtl] code{direction:ltr;unicode-bidi:embed}.markdown-body .alert>p{margin-bottom:0}.markdown-body pre.abc,.markdown-body pre.flow-chart,.markdown-body pre.graphviz,.markdown-body pre.mermaid,.markdown-body pre.sequence-diagram,.markdown-body pre.vega{text-align:center;background-color:inherit;border-radius:0;white-space:inherit;overflow:visible}.markdown-body pre.abc>code,.markdown-body pre.flow-chart>code,.markdown-body pre.graphviz>code,.markdown-body pre.mermaid>code,.markdown-body pre.sequence-diagram>code,.markdown-body pre.vega>code{text-align:left}.markdown-body pre.abc>svg,.markdown-body pre.flow-chart>svg,.markdown-body pre.graphviz>svg,.markdown-body pre.mermaid>svg,.markdown-body pre.sequence-diagram>svg,.markdown-body pre.vega>svg{max-width:100%;height:100%}.markdown-body pre>code.wrap{white-space:pre-wrap;white-space:-moz-pre-wrap;white-space:-pre-wrap;white-space:-o-pre-wrap;word-wrap:break-word}.markdown-body .alert>p,.markdown-body .alert>ul{margin-bottom:0}.markdown-body summary{display:list-item}.markdown-body summary:focus{outline:none}.markdown-body details summary{cursor:pointer}.markdown-body details:not([open])>:not(summary){display:none}.markdown-body figure{margin:1em 40px}.markdown-body .mark,.markdown-body mark{background-color:#fff1a7}.vimeo,.youtube{cursor:pointer;display:table;text-align:center;background-position:50%;background-repeat:no-repeat;background-size:contain;background-color:#000;overflow:hidden}.vimeo,.youtube{position:relative;width:100%}.youtube{padding-bottom:56.25%}.vimeo img{width:100%;object-fit:contain;z-index:0}.youtube img{object-fit:cover;z-index:0}.vimeo iframe,.youtube iframe,.youtube img{width:100%;height:100%;position:absolute;top:0;left:0}.vimeo iframe,.youtube iframe{vertical-align:middle;z-index:1}.vimeo .icon,.youtube .icon{position:absolute;height:auto;width:auto;top:50%;left:50%;transform:translate(-50%,-50%);color:#fff;opacity:.3;transition:opacity .2s;z-index:0}.vimeo:hover .icon,.youtube:hover .icon{opacity:.6;transition:opacity .2s}.slideshare .inner,.speakerdeck .inner{position:relative;width:100%}.slideshare .inner iframe,.speakerdeck .inner iframe{position:absolute;top:0;bottom:0;left:0;right:0;width:100%;height:100%}.MJX_Assistive_MathML{display:none}#MathJax_Message{z-index:1000!important}.ui-infobar{position:relative;z-index:2;max-width:760px;margin:25px auto -25px;color:#777}.toc .invisable-node{list-style-type:none}.ui-toc{position:fixed;bottom:20px;z-index:998}.ui-toc.both-mode{margin-left:8px}.ui-toc.both-mode .ui-toc-label{height:40px;padding:10px 4px;border-top-left-radius:0;border-bottom-left-radius:0}.ui-toc-label{background-color:#e6e6e6;border:none;color:#868686;transition:opacity .2s}.ui-toc .open .ui-toc-label{opacity:1;color:#fff;transition:opacity .2s}.ui-toc-label:focus{opacity:.3;background-color:#ccc;color:#000}.ui-toc-label:hover{opacity:1;background-color:#ccc;transition:opacity .2s}.ui-toc-dropdown{margin-top:20px;margin-bottom:20px;padding-left:10px;padding-right:10px;max-width:45vw;width:25vw;max-height:70vh;overflow:auto;text-align:inherit}.ui-toc-dropdown>.toc{max-height:calc(70vh - 100px);overflow:auto}.ui-toc-dropdown[dir=rtl] .nav{padding-right:0;letter-spacing:.0029em}.ui-toc-dropdown a{overflow:hidden;text-overflow:ellipsis;white-space:pre}.ui-toc-dropdown .nav>li>a{display:block;padding:4px 20px;font-size:13px;font-weight:500;color:#767676}.ui-toc-dropdown .nav>li:first-child:last-child > ul,.ui-toc-dropdown .toc.expand ul{display:block}.ui-toc-dropdown .nav>li>a:focus,.ui-toc-dropdown .nav>li>a:hover{padding-left:19px;color:#000;text-decoration:none;background-color:transparent;border-left:1px solid #000}.ui-toc-dropdown[dir=rtl] .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav>li>a:hover{padding-right:19px;border-left:none;border-right:1px solid #000}.ui-toc-dropdown .nav>.active:focus>a,.ui-toc-dropdown .nav>.active:hover>a,.ui-toc-dropdown .nav>.active>a{padding-left:18px;font-weight:700;color:#000;background-color:transparent;border-left:2px solid #000}.ui-toc-dropdown[dir=rtl] .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav>.active>a{padding-right:18px;border-left:none;border-right:2px solid #000}.ui-toc-dropdown .nav .nav{display:none;padding-bottom:10px}.ui-toc-dropdown .nav>.active>ul{display:block}.ui-toc-dropdown .nav .nav>li>a{padding-top:1px;padding-bottom:1px;padding-left:30px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a{padding-right:30px}.ui-toc-dropdown .nav .nav>li>ul>li>a{padding-top:1px;padding-bottom:1px;padding-left:40px;font-size:12px;font-weight:400}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a{padding-right:40px}.ui-toc-dropdown .nav .nav>li>a:focus,.ui-toc-dropdown .nav .nav>li>a:hover{padding-left:29px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>a:hover{padding-right:29px}.ui-toc-dropdown .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown .nav .nav>li>ul>li>a:hover{padding-left:39px}.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:focus,.ui-toc-dropdown[dir=rtl] .nav .nav>li>ul>li>a:hover{padding-right:39px}.ui-toc-dropdown .nav .nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>a{padding-left:28px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>a{padding-right:28px}.ui-toc-dropdown .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown .nav .nav>.active>.nav>.active>a{padding-left:38px;font-weight:500}.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:focus>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active:hover>a,.ui-toc-dropdown[dir=rtl] .nav .nav>.active>.nav>.active>a{padding-right:38px}.markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif}html[lang^=ja] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .markdown-body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}html .markdown-body[lang^=ja]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html .markdown-body[lang=zh-tw]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html .markdown-body[lang=zh-cn]{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Helvetica,Roboto,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}html[lang^=ja] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ\ Ｐゴシック,sans-serif}html[lang=zh-tw] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html[lang=zh-cn] .ui-toc-dropdown{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}html .ui-toc-dropdown[lang^=ja]{font-family:Source Sans Pro,Helvetica,Arial,Meiryo UI,MS PGothic,ＭＳ\ Ｐゴシック,sans-serif}html .ui-toc-dropdown[lang=zh-tw]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft JhengHei UI,微軟正黑UI,sans-serif}html .ui-toc-dropdown[lang=zh-cn]{font-family:Source Sans Pro,Helvetica,Arial,Microsoft YaHei UI,微软雅黑UI,sans-serif}.ui-affix-toc{position:fixed;top:0;max-width:15vw;max-height:70vh;overflow:auto}.back-to-top,.expand-toggle,.go-to-bottom{display:block;padding:4px 10px;margin-top:10px;margin-left:10px;font-size:12px;font-weight:500;color:#999}.back-to-top:focus,.back-to-top:hover,.expand-toggle:focus,.expand-toggle:hover,.go-to-bottom:focus,.go-to-bottom:hover{color:#563d7c;text-decoration:none}.back-to-top,.go-to-bottom{margin-top:0}.ui-user-icon{width:20px;height:20px;display:block;border-radius:50%;margin-top:2px;margin-bottom:2px;margin-right:5px;background-position:50%;background-repeat:no-repeat;background-size:cover}.ui-user-icon.small{width:18px;height:18px;display:inline-block;vertical-align:middle;margin:0 0 .2em}.ui-infobar>small>span{line-height:22px}.ui-infobar>small .dropdown{display:inline-block}.ui-infobar>small .dropdown a:focus,.ui-infobar>small .dropdown a:hover{text-decoration:none}.ui-more-info{color:#888;cursor:pointer;vertical-align:middle}.ui-more-info .fa{font-size:16px}.ui-connectedGithub,.ui-published-note{color:#888}.ui-connectedGithub{line-height:23px;white-space:nowrap}.ui-connectedGithub a.file-path{color:#888;text-decoration:none;padding-left:22px}.ui-connectedGithub a.file-path:active,.ui-connectedGithub a.file-path:hover{color:#888;text-decoration:underline}.ui-connectedGithub .fa{font-size:20px}.ui-published-note .fa{font-size:20px;vertical-align:top}.unselectable{-webkit-user-select:none;-o-user-select:none;user-select:none}.selectable{-webkit-user-select:text;-o-user-select:text;user-select:text}@media print{blockquote,div,img,pre,table{page-break-inside:avoid!important}a[href]:after{font-size:12px!important}}.markdown-body.slides{position:relative;z-index:1;color:#222}.markdown-body.slides:before{content:"";display:block;position:absolute;top:0;left:0;right:0;bottom:0;z-index:-1;background-color:currentColor;box-shadow:0 0 0 50vw}.markdown-body.slides section[data-markdown]{position:relative;margin-bottom:1.5em;background-color:#fff;text-align:center}.markdown-body.slides section[data-markdown] code{text-align:left}.markdown-body.slides section[data-markdown]:before{content:"";display:block;padding-bottom:56.23%}.markdown-body.slides section[data-markdown]>div:first-child{position:absolute;top:50%;left:1em;right:1em;transform:translateY(-50%);max-height:100%;overflow:hidden}.markdown-body.slides section[data-markdown]>ul{display:inline-block}.markdown-body.slides>section>section+section:after{content:"";position:absolute;top:-1.5em;right:1em;height:1.5em;border:3px solid #777}.site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] .site-ui-font{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}body{font-smoothing:subpixel-antialiased!important;-webkit-font-smoothing:subpixel-antialiased!important;-moz-osx-font-smoothing:auto!important;text-shadow:0 0 1em transparent,1px 1px 1.2px rgba(0,0,0,.004);-webkit-overflow-scrolling:touch;letter-spacing:.025em;font-family:Source Sans Pro,Helvetica,Arial,sans-serif}html[lang^=ja] body{font-family:Source Sans Pro,Helvetica,Arial,Hiragino Kaku Gothic Pro,ヒラギノ角ゴ Pro W3,Osaka,Meiryo,メイリオ,MS Gothic,ＭＳ\ ゴシック,sans-serif}html[lang=zh-tw] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang TC,Microsoft JhengHei,微軟正黑,sans-serif}html[lang=zh-cn] body{font-family:Source Sans Pro,Helvetica,Arial,PingFang SC,Microsoft YaHei,微软雅黑,sans-serif}abbr[title]{border-bottom:none;text-decoration:underline;-webkit-text-decoration:underline dotted;text-decoration:underline dotted}abbr[data-original-title],abbr[title]{cursor:help}body.modal-open{overflow-y:auto;padding-right:0!important}
+    </style>
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js" integrity="sha256-8E4Is26QH0bD52WoQpcB+R/tcWQtpzlCojrybUd7Mxo=" crossorigin="anonymous"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <div id="doc" class="markdown-body container-fluid comment-inner comment-enabled" data-hard-breaks="true"><p><strong><span>Authors</span></strong><span>: Carayon Chloé - Taillieu Victor</span><br>
+<strong><span>Date</span></strong><span>: 21/11/2020</span></p><hr><h1 id="TP6-Apache-HBase" data-id="TP6-Apache-HBase"><a class="anchor hidden-xs" href="#TP6-Apache-HBase" title="TP6-Apache-HBase"><span class="octicon octicon-link"></span></a><span>TP6: Apache HBase</span></h1><hr><h2 id="Introduction" data-id="Introduction"><a class="anchor hidden-xs" href="#Introduction" title="Introduction"><span class="octicon octicon-link"></span></a><span>Introduction</span></h2><p><span>This TP aims to discover Apache HBase and learn the Ruby synthax by creating our own database.</span><br>
+<span>We will reuse the file trees.csv and create the corresponding table using a python script.</span></p><h2 id="1-First-commands" data-id="1-First-commands"><a class="anchor hidden-xs" href="#1-First-commands" title="1-First-commands"><span class="octicon octicon-link"></span></a><span>1. First commands</span></h2><p><span>In order to familiarize with this new NoSQL database, let’s perform some basic commands.</span></p><h3 id="11-Base-commands" data-id="11-Base-commands"><a class="anchor hidden-xs" href="#11-Base-commands" title="11-Base-commands"><span class="octicon octicon-link"></span></a><span>1.1. Base commands</span></h3><ul>
+<li><span>To connect</span></li>
+</ul><pre><code>-sh-4.2$ hbase shell
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/hdp/3.1.5.0-152/hadoop/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/hdp/3.1.5.0-152/hbase/lib/client-facing-thirdparty/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.slf4j.impl.Log4jLoggerFactory]
+HBase Shell
+Use "help" to get list of supported commands.
+Use "exit" to quit this interactive shell.
+For Reference, please visit: http://hbase.apache.org/2.0/book.html#shell
+Version 2.1.6.3.1.5.0-152, rUnknown, Thu Dec 12 20:16:57 UTC 2019
+Took 0.0039 seconds   
+</code></pre><ul>
+<li><span>To obtain the status</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):003:0&gt;</span> status
+<span class="hljs-number">1</span> active master, <span class="hljs-number">1</span> backup masters, <span class="hljs-number">3</span> servers, <span class="hljs-number">0</span> dead, <span class="hljs-number">2.6667</span> average load
+Took <span class="hljs-number">0</span>.<span class="hljs-number">3215</span> seconds    
+</code></pre><ul>
+<li><span>And the version</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):004:0&gt;</span> version
+<span class="hljs-number">2.1</span>.<span class="hljs-number">6.3</span>.<span class="hljs-number">1.5</span>.<span class="hljs-number">0</span>-<span class="hljs-number">152</span>, rUnknown, Thu Dec <span class="hljs-number">12</span> <span class="hljs-number">20</span><span class="hljs-symbol">:</span><span class="hljs-number">16</span><span class="hljs-symbol">:</span><span class="hljs-number">57</span> UTC <span class="hljs-number">2019</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0006</span> seconds
+</code></pre><ul>
+<li><span>whoami</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):005:0&gt;</span>  whoami
+ccarayon@EFREI.ONLINE (<span class="hljs-symbol">auth:</span>KERBEROS)
+	<span class="hljs-symbol">groups:</span> ccarayon, hadoop-users
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>89 seconds   
+</code></pre><ul>
+<li><span>To list</span></li>
+</ul><p><span>When we enter the command list, we have the created namespace and tables. At the beginning, there was only the default ones.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):006:0&gt;</span> list
+TABLE                                                                           
+ATLAS_ENTITY_AUDIT_EVENTS                                                       
+atlas_titan                                                                     
+<span class="hljs-number">2</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0336</span> seconds                                                             
+=&gt; [<span class="hljs-string">"ATLAS_ENTITY_AUDIT_EVENTS"</span>, <span class="hljs-string">"atlas_titan"</span>]
+</code></pre><ul>
+<li><span>To exit</span></li>
+</ul><p><span>We exit HBase and will return in the Hadoop cluster.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):007:0&gt;</span> exit
+</code></pre><h3 id="12-Create-your-own-namespace" data-id="12-Create-your-own-namespace"><a class="anchor hidden-xs" href="#12-Create-your-own-namespace" title="12-Create-your-own-namespace"><span class="octicon octicon-link"></span></a><span>1.2. Create your own namespace</span></h3><p><span>Create our own namespace:</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):006:0&gt;</span> create_namespace <span class="hljs-string">'ccarayon'</span>
+</code></pre><p><span>To see the list of namespaces:</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):005:0&gt;</span> list_namespace
+NAMESPACE                                                                       
+ccarayon                                                                        
+default                                                                         
+hbase                                                                           
+mhatoum                                                                         
+<span class="hljs-number">4</span> row(s)
+Took <span class="hljs-number">0</span>.0881 seconds   
+</code></pre><h3 id="13-Creating-a-table" data-id="13-Creating-a-table"><a class="anchor hidden-xs" href="#13-Creating-a-table" title="13-Creating-a-table"><span class="octicon octicon-link"></span></a><span>1.3. Creating a table</span></h3><p><span>To create the ‘library’ table with families ‘author’ and ‘book’, we enter this command:</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):006:0&gt;</span> create <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'author'</span>, <span class="hljs-string">'book'</span>
+Created table <span class="hljs-symbol">ccarayon:</span>library
+Took <span class="hljs-number">1.2944</span> seconds                                                             
+=&gt; Hbase::Table - <span class="hljs-symbol">ccarayon:</span>library
+</code></pre><p><span>In order to specify the number of versions available for each family, we have to run this command:</span></p><ul>
+<li><span>Version of Author</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):007:0&gt;</span> alter <span class="hljs-string">'ccarayon:library'</span>, {NAME =&gt; <span class="hljs-string">'author'</span>, VERSIONS =&gt; <span class="hljs-number">2</span>}
+Updating all regions with the new schema...
+<span class="hljs-number">1</span>/<span class="hljs-number">1</span> regions updated.
+Done.
+Took <span class="hljs-number">2.3229</span> seconds 
+</code></pre><ul>
+<li><span>Version of Book</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):008:0&gt;</span> alter <span class="hljs-string">'ccarayon:library'</span>, {NAME =&gt; <span class="hljs-string">'book'</span>, VERSIONS =&gt; <span class="hljs-number">3</span>}
+Updating all regions with the new schema...
+<span class="hljs-number">1</span>/<span class="hljs-number">1</span> regions updated.
+Done.
+Took <span class="hljs-number">2.0968</span> seconds  
+</code></pre><p><span>To describe the table structure:</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):009:0&gt;</span> describe <span class="hljs-string">'ccarayon:library'</span>
+Table <span class="hljs-symbol">ccarayon:</span>library is ENABLED                                               
+<span class="hljs-symbol">ccarayon:</span>library                                                                
+COLUMN FAMILIES DESCRIPTION                                                     
+{NAME =&gt; <span class="hljs-string">'author'</span>, VERSIONS =&gt; <span class="hljs-string">'2'</span>, EVICT_BLOCKS_ON_CLOSE =&gt; <span class="hljs-string">'false'</span>, NEW_VERSIO
+N_BEHAVIOR =&gt; <span class="hljs-string">'false'</span>, KEEP_DELETED_CELLS =&gt; <span class="hljs-string">'FALSE'</span>, CACHE_DATA_ON_WRITE =&gt; <span class="hljs-string">'fa
+lse'</span>, DATA_BLOCK_ENCODING =&gt; <span class="hljs-string">'NONE'</span>, TTL =&gt; <span class="hljs-string">'FOREVER'</span>, MIN_VERSIONS =&gt; <span class="hljs-string">'0'</span>, REPL
+ICATION_SCOPE =&gt; <span class="hljs-string">'0'</span>, BLOOMFILTER =&gt; <span class="hljs-string">'ROW'</span>, CACHE_INDEX_ON_WRITE =&gt; <span class="hljs-string">'false'</span>, IN<span class="hljs-number">_</span>
+MEMORY =&gt; <span class="hljs-string">'false'</span>, CACHE_BLOOMS_ON_WRITE =&gt; <span class="hljs-string">'false'</span>, PREFETCH_BLOCKS_ON_OPEN =&gt; 
+<span class="hljs-string">'false'</span>, COMPRESSION =&gt; <span class="hljs-string">'NONE'</span>, BLOCKCACHE =&gt; <span class="hljs-string">'true'</span>, BLOCKSIZE =&gt; <span class="hljs-string">'65536'</span>}     
+{NAME =&gt; <span class="hljs-string">'book'</span>, VERSIONS =&gt; <span class="hljs-string">'3'</span>, EVICT_BLOCKS_ON_CLOSE =&gt; <span class="hljs-string">'false'</span>, NEW_VERSION<span class="hljs-number">_</span>
+BEHAVIOR =&gt; <span class="hljs-string">'false'</span>, KEEP_DELETED_CELLS =&gt; <span class="hljs-string">'FALSE'</span>, CACHE_DATA_ON_WRITE =&gt; <span class="hljs-string">'fals
+e'</span>, DATA_BLOCK_ENCODING =&gt; <span class="hljs-string">'NONE'</span>, TTL =&gt; <span class="hljs-string">'FOREVER'</span>, MIN_VERSIONS =&gt; <span class="hljs-string">'0'</span>, REPLIC
+ATION_SCOPE =&gt; <span class="hljs-string">'0'</span>, BLOOMFILTER =&gt; <span class="hljs-string">'ROW'</span>, CACHE_INDEX_ON_WRITE =&gt; <span class="hljs-string">'false'</span>, IN_ME
+MORY =&gt; <span class="hljs-string">'false'</span>, CACHE_BLOOMS_ON_WRITE =&gt; <span class="hljs-string">'false'</span>, PREFETCH_BLOCKS_ON_OPEN =&gt; <span class="hljs-string">'f
+alse'</span>, COMPRESSION =&gt; <span class="hljs-string">'NONE'</span>, BLOCKCACHE =&gt; <span class="hljs-string">'true'</span>, BLOCKSIZE =&gt; <span class="hljs-string">'65536'</span>}       
+<span class="hljs-number">2</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">02</span>88 seconds   
+</code></pre><h3 id="14-Adding-values" data-id="14-Adding-values"><a class="anchor hidden-xs" href="#14-Adding-values" title="14-Adding-values"><span class="octicon octicon-link"></span></a><span>1.4. Adding values</span></h3><p><span>We add those values, using put commands with:</span></p><ul>
+<li><span>‘vhugo’ or ‘jverne’ as key</span></li>
+<li><span>‘author’ or ‘book’ as family</span></li>
+<li><span>‘lastname’, ‘firstname’ as columns for ‘author’</span></li>
+<li><span>‘title’, ‘category’, ‘year’, ‘publisher’ as columns for ‘book’</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):028:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:lastname'</span>, <span class="hljs-string">'Hugo'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">3421</span> seconds  
+<span class="hljs-meta">hbase(main):029:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:firstname'</span>, <span class="hljs-string">'Victor'</span> 
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>84 seconds  
+<span class="hljs-meta">hbase(main):031:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'book:title'</span>, <span class="hljs-string">'La légende des siècles'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>92 seconds  
+<span class="hljs-meta">hbase(main):032:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'book:category'</span>, <span class="hljs-string">'Poèmes'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0111</span> seconds 
+<span class="hljs-meta">hbase(main):033:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'book:year'</span>, <span class="hljs-string">'1855'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>9<span class="hljs-number">0</span> seconds                                                             
+<span class="hljs-meta">hbase(main):034:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'book:year'</span>, <span class="hljs-string">'1877'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0061</span> seconds                                                             
+<span class="hljs-meta">hbase(main):035:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'book:year'</span>, <span class="hljs-string">'1883'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">005</span>9 seconds
+<span class="hljs-meta">hbase(main):036:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, <span class="hljs-string">'author:lastname'</span>, <span class="hljs-string">'Verne'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0072</span> seconds                                                             
+<span class="hljs-meta">hbase(main):037:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, <span class="hljs-string">'author:firstname'</span>, <span class="hljs-string">'Jules'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">006</span>9 seconds                                                             
+<span class="hljs-meta">hbase(main):038:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, <span class="hljs-string">'book:publisher'</span>, <span class="hljs-string">'Hetzel'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0064</span> seconds                                                             
+<span class="hljs-meta">hbase(main):039:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, <span class="hljs-string">'book:title'</span>, <span class="hljs-string">'Face au drapeau'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">007</span>8 seconds                                                             
+<span class="hljs-meta">hbase(main):040:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, <span class="hljs-string">'book:year'</span>, <span class="hljs-string">'1896'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0075</span> seconds   
+</code></pre><p><span>All those instructions only created two tuples, ‘vhugo’ and ‘jverne’.</span><br>
+<span>We can look at them using a get:</span></p><ul>
+<li><span>‘vhugo’</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):045:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">author:</span>firstname                 timestamp=<span class="hljs-number">1605599202272</span>, value=Victor                                                         
+ <span class="hljs-symbol">author:</span>lastname                  timestamp=<span class="hljs-number">1605599164429</span>, value=Hugo                                                           
+ <span class="hljs-symbol">book:</span>category                    timestamp=<span class="hljs-number">1605599332160</span>, value=Po\xC3\xA8mes                                                  
+ <span class="hljs-symbol">book:</span>title                       timestamp=<span class="hljs-number">1605599292559</span>, value=La l\xC3\xA9gende des si\xC3\xA8cles                           
+ <span class="hljs-symbol">book:</span>year                        timestamp=<span class="hljs-number">1605599362897</span>, value=<span class="hljs-number">1883</span>                                                           
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0305</span> seconds                                                         
+</code></pre><ul>
+<li><span>‘jverne’</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):046:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">author:</span>firstname                 timestamp=<span class="hljs-number">1605599435686</span>, value=Jules                                                          
+ <span class="hljs-symbol">author:</span>lastname                  timestamp=<span class="hljs-number">1605599420420</span>, value=Verne                                                          
+ <span class="hljs-symbol">book:</span>publisher                   timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                                                         
+ <span class="hljs-symbol">book:</span>title                       timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau                                                
+ <span class="hljs-symbol">book:</span>year                        timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                                                           
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>93 seconds 
+</code></pre><p><span>We clearly see that those two tuples don’t have the same columns.</span></p><h3 id="15-Counting-values" data-id="15-Counting-values"><a class="anchor hidden-xs" href="#15-Counting-values" title="15-Counting-values"><span class="octicon octicon-link"></span></a><span>1.5. Counting values</span></h3><p><span>To count the number of tuples:</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):052:0&gt;</span> count <span class="hljs-string">'ccarayon:library'</span>
+<span class="hljs-number">2</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0254</span> seconds                                                                                                             
+=&gt; <span class="hljs-number">2</span>
+</code></pre><p><span>We obtain 2 as we have created only two tuples: ‘vhugo’ and ‘jverne’.</span></p><h3 id="16-Retrieving-values" data-id="16-Retrieving-values"><a class="anchor hidden-xs" href="#16-Retrieving-values" title="16-Retrieving-values"><span class="octicon octicon-link"></span></a><span>1.6. Retrieving values</span></h3><ul>
+<li><span>Get ‘vhugo’</span></li>
+</ul><p><span>It gives us all the information of ‘vhugo’ tuple.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):053:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">author:</span>firstname                 timestamp=<span class="hljs-number">1605599202272</span>, value=Victor                                                         
+ <span class="hljs-symbol">author:</span>lastname                  timestamp=<span class="hljs-number">1605599164429</span>, value=Hugo                                                           
+ <span class="hljs-symbol">book:</span>category                    timestamp=<span class="hljs-number">1605599332160</span>, value=Po\xC3\xA8mes                                                  
+ <span class="hljs-symbol">book:</span>title                       timestamp=<span class="hljs-number">1605599292559</span>, value=La l\xC3\xA9gende des si\xC3\xA8cles                           
+ <span class="hljs-symbol">book:</span>year                        timestamp=<span class="hljs-number">1605599362897</span>, value=<span class="hljs-number">1883</span>                                                           
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0127</span> seconds    
+</code></pre><ul>
+<li><span>Get ‘vhugo’, ‘author’</span></li>
+</ul><p><span>It gives only the information from the ‘author’ family.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):054:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author'</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">author:</span>firstname                 timestamp=<span class="hljs-number">1605599202272</span>, value=Victor                                                         
+ <span class="hljs-symbol">author:</span>lastname                  timestamp=<span class="hljs-number">1605599164429</span>, value=Hugo                                                           
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">01</span>98 seconds 
+</code></pre><ul>
+<li><span>Get ‘vhugo’, ‘author:firstname’</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):055:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:firstname'</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">author:</span>firstname                 timestamp=<span class="hljs-number">1605599202272</span>, value=Victor                                                         
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>83 seconds 
+</code></pre><ul>
+<li><span>Get ‘jverne’, ‘book’</span></li>
+</ul><p><span>In order to obtain the ‘book’ family from the ‘jverne’ tuple.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):059:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, COLUMN =&gt; <span class="hljs-string">'book'</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">book:</span>publisher                   timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                                                         
+ <span class="hljs-symbol">book:</span>title                       timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau                                                
+ <span class="hljs-symbol">book:</span>year                        timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                                                           
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0062</span> seconds 
+</code></pre><ul>
+<li><span>Get ‘jverne’, ‘book:title’</span></li>
+</ul><p><span>In order to obtain the ‘title’ column from the book’ family in the ‘jverne’ tuple.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):060:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, COLUMN =&gt; <span class="hljs-string">'book:title'</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">book:</span>title                       timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau                                                
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0161</span> seconds  
+</code></pre><ul>
+<li><span>Get ‘jverne’, ‘book:title’ , ‘book:year’ , ‘book:publisher’</span></li>
+</ul><p><span>In order to obtain the ‘title’, ‘year’ and ‘publisher’ columns from the book’ family in the ‘jverne’ tuple.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):061:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, COLUMN =&gt; [<span class="hljs-string">'book:title'</span>, <span class="hljs-string">'book:year'</span>, <span class="hljs-string">'book:publisher'</span>]
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">book:</span>publisher                   timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                                                         
+ <span class="hljs-symbol">book:</span>title                       timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau                                                
+ <span class="hljs-symbol">book:</span>year                        timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                                                           
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0204</span> seconds 
+</code></pre><ul>
+<li><span>The filter</span></li>
+</ul><p><span>This filter asks which columns have ‘Jules’ as value.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):062:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'jverne'</span>, FILTER =&gt; <span class="hljs-string">"ValueFilter(=, 'binary:Jules')"</span>
+COLUMN                            CELL                                                                                          
+ <span class="hljs-symbol">author:</span>firstname                 timestamp=<span class="hljs-number">1605599435686</span>, value=Jules                                                          
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0707</span> seconds 
+</code></pre><h3 id="17-Tuple-browsing" data-id="17-Tuple-browsing"><a class="anchor hidden-xs" href="#17-Tuple-browsing" title="17-Tuple-browsing"><span class="octicon octicon-link"></span></a><span>1.7. Tuple browsing</span></h3><ul>
+<li><span>To display all the data in the table</span></li>
+</ul><p><span>Using a scan command, we recover the information from the different tuples.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):064:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>
+ROW                         COLUMN+CELL                                                                 
+ jverne                     column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599435686</span>, value=Jules               
+ jverne                     column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599420420</span>, value=Verne                
+ jverne                     column=<span class="hljs-symbol">book:</span>publisher, timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                
+ jverne                     column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau           
+ jverne                     column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                       
+ vhugo                      column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599202272</span>, value=Victor              
+ vhugo                      column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599164429</span>, value=Hugo                 
+ vhugo                      column=<span class="hljs-symbol">book:</span>category, timestamp=<span class="hljs-number">1605599332160</span>, value=Po\xC3\xA8mes          
+ vhugo                      column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599292559</span>, value=La l\xC3\xA9gende des si\x
+							C3\xA8cles                                                                  
+ vhugo                      column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599362897</span>, value=<span class="hljs-number">1883</span>                       
+<span class="hljs-number">2</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0266</span> seconds
+</code></pre><ul>
+<li><span>To display the data from the ‘book’ family</span></li>
+</ul><p><span>It returns all the information from the ‘book’ family from all the tuples we have created.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):065:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, COLUMNS =&gt; <span class="hljs-string">'book'</span>
+ROW                         COLUMN+CELL                                                                 
+ jverne                     column=<span class="hljs-symbol">book:</span>publisher, timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                
+ jverne                     column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau           
+ jverne                     column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                       
+ vhugo                      column=<span class="hljs-symbol">book:</span>category, timestamp=<span class="hljs-number">1605599332160</span>, value=Po\xC3\xA8mes          
+ vhugo                      column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599292559</span>, value=La l\xC3\xA9gende des si\x
+							C3\xA8cles                                                                  
+ vhugo                      column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599362897</span>, value=<span class="hljs-number">1883</span>                       
+<span class="hljs-number">2</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>96 seconds 
+</code></pre><ul>
+<li><span>To display the year values of the book family present in the table.</span></li>
+</ul><p><span>It returns the years in the table.</span><br>
+<span>If we want to see all the versions, we will have to add </span><code>VERSIONS =&gt; 10</code><span>.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):066:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, COLUMNS =&gt; <span class="hljs-string">'book:year'</span>
+ROW                         COLUMN+CELL                                                                 
+ jverne                     column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                       
+ vhugo                      column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599362897</span>, value=<span class="hljs-number">1883</span>                       
+<span class="hljs-number">2</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0103</span> seconds 
+</code></pre><ul>
+<li><span>Return keys between a and n and the fields of the family author.</span></li>
+</ul><p><span>Using start and stop row, we can only see the tuple ‘jverne’.</span><br>
+<span>The first letter of ‘vhugo’ is not between a and n.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):114:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, COLUMNS =&gt; <span class="hljs-string">'author'</span>, STARTROW=&gt;<span class="hljs-string">'a'</span>, STOPROW=&gt;<span class="hljs-string">'n'</span>
+ROW                         COLUMN+CELL                                                                 
+ jverne                     column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599435686</span>, value=Jules               
+ jverne                     column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599420420</span>, value=Verne                
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0106</span> seconds 
+</code></pre><ul>
+<li><span>Return keys between a and n and the fields of the family author using a filter.</span></li>
+</ul><p><span>We can use a regexstring expression to filter the row to perform it. And we will specify the family we are interresting in using FamilyFilter.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):121:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, {FILTER =&gt; <span class="hljs-string">"RowFilter(=, 'regexstring:^[a-n]') AND FamilyFilter(=, 'binary:author')"</span>}
+ROW                             COLUMN+CELL                                                                              
+ jverne                         column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599435686</span>, value=Jules                            
+ jverne                         column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599420420</span>, value=Verne                             
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">034</span>8 seconds 
+</code></pre><ul>
+<li><span>To display the author values: firstname</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):102:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, COLUMNS =&gt; <span class="hljs-string">'author:firstname'</span>
+ROW                         COLUMN+CELL                                                                 
+ jverne                     column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599435686</span>, value=Jules               
+ vhugo                      column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599202272</span>, value=Victor              
+<span class="hljs-number">2</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>95 seconds   
+</code></pre><ul>
+<li><span>To search for columns whose value equals the specified title</span></li>
+</ul><p><span>We will use a SingleColumnValueFilter which will look into the ‘title’ column in the ‘book’ family and specify that we want to find a value which is equal to the title ‘Face au drapeau’.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):105:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, {FILTER =&gt; <span class="hljs-string">"SingleColumnValueFilter('book', 'title', =, 'binary:Face au drapeau')"</span>}
+ROW                         COLUMN+CELL                                                                 
+ jverne                     column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599435686</span>, value=Jules               
+ jverne                     column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599420420</span>, value=Verne                
+ jverne                     column=<span class="hljs-symbol">book:</span>publisher, timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                
+ jverne                     column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau           
+ jverne                     column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                       
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0463</span> seconds  
+</code></pre><ul>
+<li><span>To display the tuples whose book column: date is less than or equal to 1890.</span></li>
+</ul><p><span>We will use a SingleColumnValueFilter which will look into the ‘year’ column in the ‘book’ family.</span><br>
+<span>We specify that we want to find a value which is inferior or equal to the year ‘1890’.</span><br>
+<span>We will obtain the tuple ‘vhugo’ where the year is 1883.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):125:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, {FILTER =&gt; <span class="hljs-string">"SingleColumnValueFilter('book', 'year', &lt;=, 'binary:1890')"</span>}
+ROW                             COLUMN+CELL                                                                              
+ vhugo                          column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599202272</span>, value=Victor                           
+ vhugo                          column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599164429</span>, value=Hugo                              
+ vhugo                          column=<span class="hljs-symbol">book:</span>category, timestamp=<span class="hljs-number">1605599332160</span>, value=Po\xC3\xA8mes                       
+ vhugo                          column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599292559</span>, value=La l\xC3\xA9gende des si\xC3\xA8cles   
+ vhugo                          column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599362897</span>, value=<span class="hljs-number">1883</span>                                    
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0161</span> seconds  
+</code></pre><ul>
+<li><span>To search for tuples whose key begins with jv and one of the values of which matches the regular expression.</span></li>
+</ul><p><span>We will use a RowFilter with regexstring. It returns the tuple corresponding.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):126:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>, {FILTER =&gt; <span class="hljs-string">"RowFilter(=, 'regexstring:^jv') "</span>}
+ROW                             COLUMN+CELL                                                                              
+ jverne                         column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599435686</span>, value=Jules                            
+ jverne                         column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599420420</span>, value=Verne                             
+ jverne                         column=<span class="hljs-symbol">book:</span>publisher, timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                             
+ jverne                         column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau                        
+ jverne                         column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                                    
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">014</span>9 seconds 
+</code></pre><h3 id="18-Updating-a-value" data-id="18-Updating-a-value"><a class="anchor hidden-xs" href="#18-Updating-a-value" title="18-Updating-a-value"><span class="octicon octicon-link"></span></a><span>1.8. Updating a value</span></h3><p><span>We update the values in our tuples.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):127:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:lastname'</span>, <span class="hljs-string">'HAGO'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0214</span> seconds                                                                                      
+<span class="hljs-meta">hbase(main):128:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:lastname'</span>, <span class="hljs-string">'HUGO'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">004</span>8 seconds                                                                                      
+<span class="hljs-meta">hbase(main):129:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:firstname'</span>, <span class="hljs-string">'Victor Marie'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0067</span> seconds                                                                                      
+<span class="hljs-meta">hbase(main):130:0&gt;</span> put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:lastname'</span>, <span class="hljs-string">'Hugo'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">00</span>86 seconds                                                                                      
+<span class="hljs-meta">hbase(main):131:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author'</span>
+COLUMN                      CELL                                                                         
+ <span class="hljs-symbol">author:</span>firstname           timestamp=<span class="hljs-number">1605604751485</span>, value=Victor Marie                                  
+ <span class="hljs-symbol">author:</span>lastname            timestamp=<span class="hljs-number">1605604765492</span>, value=Hugo                                          
+<span class="hljs-number">1</span> row(s)
+
+<span class="hljs-meta">hbase(main):132:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, COLUMNS=&gt;<span class="hljs-string">'author'</span>
+COLUMN                      CELL                                                                         
+ <span class="hljs-symbol">author:</span>firstname           timestamp=<span class="hljs-number">1605604751485</span>, value=Victor Marie                                  
+ <span class="hljs-symbol">author:</span>lastname            timestamp=<span class="hljs-number">1605604765492</span>, value=Hugo                                          
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0060</span> seconds   
+</code></pre><p><span>In order to see all the available versions, we will use ‘VERSIONS =&gt; 10’.</span></p><ul>
+<li><span>get ‘vhugo:author’ versions</span></li>
+</ul><p><span>It will give all the versions existing for the key ‘vhugo’ for family ‘author’. There are 2 versions.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):133:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, COLUMNS =&gt; <span class="hljs-string">'author'</span>, VERSIONS =&gt; <span class="hljs-number">10</span>
+COLUMN                      CELL                                                                         
+ <span class="hljs-symbol">author:</span>firstname           timestamp=<span class="hljs-number">1605604751485</span>, value=Victor Marie                                  
+ <span class="hljs-symbol">author:</span>firstname           timestamp=<span class="hljs-number">1605599202272</span>, value=Victor                                        
+ <span class="hljs-symbol">author:</span>lastname            timestamp=<span class="hljs-number">1605604765492</span>, value=Hugo                                          
+ <span class="hljs-symbol">author:</span>lastname            timestamp=<span class="hljs-number">1605604734968</span>, value=HUGO                                          
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0236</span> seconds 
+</code></pre><h3 id="19-Deleting-a-value-or-a-column" data-id="19-Deleting-a-value-or-a-column"><a class="anchor hidden-xs" href="#19-Deleting-a-value-or-a-column" title="19-Deleting-a-value-or-a-column"><span class="octicon octicon-link"></span></a><span>1.9. Deleting a value or a column</span></h3><ul>
+<li><span>Deleteall deleted the value author:name=HUGO, but not the other</span></li>
+</ul><p><span>In order to delete the value we are interesting in, we have to take its timestamp.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):143:0&gt;</span> deleteall <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, <span class="hljs-string">'author:lastname'</span>, <span class="hljs-number">1605604734968</span> 
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0067</span> seconds                                                                                      
+<span class="hljs-meta">hbase(main):144:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, COLUMNS=&gt;<span class="hljs-string">'author'</span>, VERSIONS =&gt; <span class="hljs-number">10</span>
+COLUMN                      CELL                                                                         
+ <span class="hljs-symbol">author:</span>firstname           timestamp=<span class="hljs-number">1605605483168</span>, value=Victor Marie                                  
+ <span class="hljs-symbol">author:</span>firstname           timestamp=<span class="hljs-number">1605605460436</span>, value=Victor                                        
+ <span class="hljs-symbol">author:</span>lastname            timestamp=<span class="hljs-number">1605604765492</span>, value=Hugo                                          
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0111</span> seconds   
+</code></pre><ul>
+<li><span>Delete all values for the column firstname.</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):145:0&gt;</span> deleteall <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>,<span class="hljs-string">'author:firstname'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0065</span> seconds 
+<span class="hljs-meta">hbase(main):146:0&gt;</span> get <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>, COLUMNS=&gt;<span class="hljs-string">'author'</span>, VERSIONS =&gt; <span class="hljs-number">10</span>
+COLUMN                      CELL                                                                         
+ <span class="hljs-symbol">author:</span>lastname            timestamp=<span class="hljs-number">1605604765492</span>, value=Hugo                                          
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0201</span> seconds 
+</code></pre><ul>
+<li><span>Delete the entire tuple</span></li>
+</ul><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):147:0&gt;</span> deleteall <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'vhugo'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0052</span> seconds  
+</code></pre><ul>
+<li><span>Check the versions</span></li>
+</ul><p><span>As we have deleted ‘vhugo’ tuple, we only see ‘jverne’ tuple.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):150:0&gt;</span> scan <span class="hljs-string">'ccarayon:library'</span>,  VERSIONS =&gt; <span class="hljs-number">10</span>
+ROW                         COLUMN+CELL                                                                  
+ jverne                     column=<span class="hljs-symbol">author:</span>firstname, timestamp=<span class="hljs-number">1605599435686</span>, value=Jules                
+ jverne                     column=<span class="hljs-symbol">author:</span>lastname, timestamp=<span class="hljs-number">1605599420420</span>, value=Verne                 
+ jverne                     column=<span class="hljs-symbol">book:</span>publisher, timestamp=<span class="hljs-number">1605599455183</span>, value=Hetzel                 
+ jverne                     column=<span class="hljs-symbol">book:</span>title, timestamp=<span class="hljs-number">1605599472074</span>, value=Face au drapeau            
+ jverne                     column=<span class="hljs-symbol">book:</span>year, timestamp=<span class="hljs-number">1605599483989</span>, value=<span class="hljs-number">1896</span>                        
+<span class="hljs-number">1</span> row(s)
+Took <span class="hljs-number">0</span>.<span class="hljs-number">011</span>8 seconds 
+</code></pre><h3 id="110-Deleting-a-table" data-id="110-Deleting-a-table"><a class="anchor hidden-xs" href="#110-Deleting-a-table" title="110-Deleting-a-table"><span class="octicon octicon-link"></span></a><span>1.10. Deleting a table</span></h3><p><span>To delete the entire table, we first have to disable the table to then be able to delete it.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):151:0&gt;</span> disable <span class="hljs-string">'ccarayon:library'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">8570</span> seconds                                                                                      
+<span class="hljs-meta">hbase(main):152:0&gt;</span> drop <span class="hljs-string">'ccarayon:library'</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">4655</span> seconds   
+</code></pre><h2 id="2-Trees" data-id="2-Trees"><a class="anchor hidden-xs" href="#2-Trees" title="2-Trees"><span class="octicon octicon-link"></span></a><span>2. Trees</span></h2><p><span>Firstly, we create the table with the three families: ‘gender’, ‘information’ and ‘address’.</span></p><pre><code class="ruby hljs"><span class="hljs-meta">hbase(main):154:0&gt;</span> create <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'gender'</span>, <span class="hljs-string">'information'</span>,<span class="hljs-string">'address'</span>
+Created table <span class="hljs-symbol">ccarayon:</span>library
+Took <span class="hljs-number">1.2683</span> seconds                                                                                      
+=&gt; Hbase::Table - <span class="hljs-symbol">ccarayon:</span>library
+</code></pre><p><span>Then, we create our script in python.</span></p><pre><code class="python hljs"><span class="hljs-comment">#!/usr/bin/env python</span>
+
+<span class="hljs-keyword">import</span> sys
+
+lines = []
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> sys.stdin:
+	lines.append(line)
+
+lines = lines[<span class="hljs-number">1</span>:]  <span class="hljs-comment"># remove header</span>
+
+<span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> range(len(lines)):
+	lines[i] = lines[i][:<span class="hljs-number">-1</span>]  <span class="hljs-comment"># remove \n</span>
+
+
+<span class="hljs-comment"># GEOPOINT 0</span>
+<span class="hljs-comment"># ARRONDISSEMENT 1</span>
+<span class="hljs-comment"># GENRE 2</span>
+<span class="hljs-comment"># ESPECE 3</span>
+<span class="hljs-comment"># FAMILLE 4</span>
+<span class="hljs-comment"># ANNEE PLANTATION 5</span>
+<span class="hljs-comment"># HAUTEUR 6</span>
+<span class="hljs-comment"># CIRCONFERENCE 7</span>
+<span class="hljs-comment"># ADRESSE 8</span>
+<span class="hljs-comment"># NOM COMMUN 9</span>
+<span class="hljs-comment"># VARIETE 10</span>
+<span class="hljs-comment"># OBJECTID 11</span>
+<span class="hljs-comment"># NOM_EV 12</span>
+
+<span class="hljs-keyword">for</span> line <span class="hljs-keyword">in</span> lines:
+	values = line.split(<span class="hljs-string">";"</span>)
+
+	<span class="hljs-comment"># gender family</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">2</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'gender:GENRE', \""</span> + values[<span class="hljs-number">2</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">3</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'gender:ESPECE', \""</span> + values[<span class="hljs-number">3</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">4</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'gender:FAMILLE', \""</span> + values[<span class="hljs-number">4</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">9</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'gender:NOM_COMMUN', \""</span> + values[<span class="hljs-number">9</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">10</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'gender:VARIETE', \""</span> + values[<span class="hljs-number">10</span>] + <span class="hljs-string">"\""</span>
+
+	<span class="hljs-comment"># information family</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">5</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'information:ANNEE_PLANTATION', \""</span> + values[<span class="hljs-number">5</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">6</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'information:HAUTEUR', \""</span> + values[<span class="hljs-number">6</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">7</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'information:CIRCONFERENCE', \""</span> + values[<span class="hljs-number">7</span>] + <span class="hljs-string">"\""</span>
+
+	<span class="hljs-comment"># address family</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">0</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'address:GEOPOINT', \""</span> + values[<span class="hljs-number">0</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">1</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'address:ARRONDISSEMENT', \""</span> + values[<span class="hljs-number">1</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">8</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'address:ADRESSE', \""</span> + values[<span class="hljs-number">8</span>] + <span class="hljs-string">"\""</span>
+	<span class="hljs-keyword">if</span> values[<span class="hljs-number">12</span>]:
+		<span class="hljs-keyword">print</span> <span class="hljs-string">"put 'ccarayon:library', '"</span> + values[<span class="hljs-number">11</span>] + <span class="hljs-string">"', 'address:NOM_EV', \""</span> + values[<span class="hljs-number">12</span>] + <span class="hljs-string">"\""</span>
+
+</code></pre><p><span>All the print from our script will be interpreted as commands for our hbase shell thanks to this command:</span></p><pre><code>-sh-4.2$ hdfs dfs -cat /user/ccarayon/trees.csv | python ./hbase.py | hbase shell
+</code></pre><p><span>During the processing, we will see at each put command an associated Took.</span><br>
+<span>It prooves that the new value has been added successfully.</span></p><pre><code class="ruby hljs">put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'75'</span>, <span class="hljs-string">'address:GEOPOINT'</span>, <span class="hljs-string">"(48.86260617, 2.23782412563)"</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0026</span> seconds                                                                                                                               
+put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'75'</span>, <span class="hljs-string">'address:ARRONDISSEMENT'</span>, <span class="hljs-string">"16"</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0026</span> seconds                                                                                                                               
+put <span class="hljs-string">'ccarayon:library'</span>, <span class="hljs-string">'75'</span>, <span class="hljs-string">'address:NOM_EV'</span>, <span class="hljs-string">"Bois de Boulogne (Moulin de Longchamp)"</span>
+Took <span class="hljs-number">0</span>.<span class="hljs-number">0025</span> seconds                                                         
+</code></pre><p><span>Finally, we can take random keys to see if the information has been correctly inserted:</span></p><pre><code>hbase(main):001:0&gt; get 'ccarayon:library', '91'
+COLUMN                                CELL                                                                                                        
+ address:ADRESSE                      timestamp=1605952691079, value=Ile de Bercy                                                                 
+ address:ARRONDISSEMENT               timestamp=1605952691076, value=12                                                                           
+ address:GEOPOINT                     timestamp=1605952691073, value=(48.8302532096, 2.41400587444)                                               
+ address:NOM_EV                       timestamp=1605952691081, value=Bois de Vincennes (Ile de Bercy)                                             
+ gender:ESPECE                        timestamp=1605952691055, value=opalus                                                                       
+ gender:FAMILLE                       timestamp=1605952691058, value=Sapindaceae                                                                  
+ gender:GENRE                         timestamp=1605952691053, value=Acer                                                                         
+ gender:NOM_COMMUN                    timestamp=1605952691062, value=Erable d'Italie                                                              
+ information:ANNEE_PLANTATION         timestamp=1605952691065, value=1870                                                                         
+ information:CIRCONFERENCE            timestamp=1605952691070, value=160.0                                                                        
+ information:HAUTEUR                  timestamp=1605952691067, value=15.0                                                                         
+1 row(s)
+Took 0.3454 seconds                                                                                                                               
+hbase(main):002:0&gt; get 'ccarayon:library', '86'
+COLUMN                                CELL                                                                                                        
+ address:ADRESSE                      timestamp=1605952691047, value=route de la ceinture du Lac Daumesnil                                        
+ address:ARRONDISSEMENT               timestamp=1605952691044, value=12                                                                           
+ address:GEOPOINT                     timestamp=1605952691041, value=(48.833545551, 2.41033694606)                                                
+ address:NOM_EV                       timestamp=1605952691050, value=Bois de Vincennes (Lac Daumesnil/porte Dor\xC3\xA9e)                         
+ gender:ESPECE                        timestamp=1605952691023, value=orientalis                                                                   
+ gender:FAMILLE                       timestamp=1605952691026, value=Platanaceae                                                                  
+ gender:GENRE                         timestamp=1605952691020, value=Platanus                                                                     
+ gender:NOM_COMMUN                    timestamp=1605952691029, value=Platane d'Orient                                                             
+ information:ANNEE_PLANTATION         timestamp=1605952691032, value=1860                                                                         
+ information:CIRCONFERENCE            timestamp=1605952691038, value=475.0                                                                        
+ information:HAUTEUR                  timestamp=1605952691035, value=22.0      
+</code></pre><h2 id="Conclusion" data-id="Conclusion"><a class="anchor hidden-xs" href="#Conclusion" title="Conclusion"><span class="octicon octicon-link"></span></a><span>Conclusion</span></h2><p><span>This TP gives us the opportunity to work on Apache HBase and manipulate Ruby synthax.</span><br>
+<span>We were able to run our own python script in order to insert data.</span></p></div>
+    <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
+        <div class="pull-right dropdown">
+            <a id="tocLabel" class="ui-toc-label btn btn-default" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Table of content">
+                <i class="fa fa-bars"></i>
+            </a>
+            <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
+                <div class="toc"><ul class="nav">
+<li class=""><a href="#TP6-Apache-HBase" title="TP6: Apache HBase">TP6: Apache HBase</a><ul class="nav">
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#1-First-commands" title="1. First commands">1. First commands</a><ul class="nav">
+<li><a href="#11-Base-commands" title="1.1. Base commands">1.1. Base commands</a></li>
+<li><a href="#12-Create-your-own-namespace" title="1.2. Create your own namespace">1.2. Create your own namespace</a></li>
+<li><a href="#13-Creating-a-table" title="1.3. Creating a table">1.3. Creating a table</a></li>
+<li><a href="#14-Adding-values" title="1.4. Adding values">1.4. Adding values</a></li>
+<li><a href="#15-Counting-values" title="1.5. Counting values">1.5. Counting values</a></li>
+<li><a href="#16-Retrieving-values" title="1.6. Retrieving values">1.6. Retrieving values</a></li>
+<li><a href="#17-Tuple-browsing" title="1.7. Tuple browsing">1.7. Tuple browsing</a></li>
+<li><a href="#18-Updating-a-value" title="1.8. Updating a value">1.8. Updating a value</a></li>
+<li><a href="#19-Deleting-a-value-or-a-column" title="1.9. Deleting a value or a column">1.9. Deleting a value or a column</a></li>
+<li><a href="#110-Deleting-a-table" title="1.10. Deleting a table">1.10. Deleting a table</a></li>
+</ul>
+</li>
+<li class=""><a href="#2-Trees" title="2. Trees">2. Trees</a></li>
+<li><a href="#Conclusion" title="Conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">Expand all</a><a class="back-to-top" href="#">Back to top</a><a class="go-to-bottom" href="#">Go to bottom</a></div>
+            </ul>
+        </div>
+    </div>
+    <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;" null null>
+        <div class="toc"><ul class="nav">
+<li class=""><a href="#TP6-Apache-HBase" title="TP6: Apache HBase">TP6: Apache HBase</a><ul class="nav">
+<li><a href="#Introduction" title="Introduction">Introduction</a></li>
+<li><a href="#1-First-commands" title="1. First commands">1. First commands</a><ul class="nav">
+<li><a href="#11-Base-commands" title="1.1. Base commands">1.1. Base commands</a></li>
+<li><a href="#12-Create-your-own-namespace" title="1.2. Create your own namespace">1.2. Create your own namespace</a></li>
+<li><a href="#13-Creating-a-table" title="1.3. Creating a table">1.3. Creating a table</a></li>
+<li><a href="#14-Adding-values" title="1.4. Adding values">1.4. Adding values</a></li>
+<li><a href="#15-Counting-values" title="1.5. Counting values">1.5. Counting values</a></li>
+<li><a href="#16-Retrieving-values" title="1.6. Retrieving values">1.6. Retrieving values</a></li>
+<li><a href="#17-Tuple-browsing" title="1.7. Tuple browsing">1.7. Tuple browsing</a></li>
+<li><a href="#18-Updating-a-value" title="1.8. Updating a value">1.8. Updating a value</a></li>
+<li><a href="#19-Deleting-a-value-or-a-column" title="1.9. Deleting a value or a column">1.9. Deleting a value or a column</a></li>
+<li><a href="#110-Deleting-a-table" title="1.10. Deleting a table">1.10. Deleting a table</a></li>
+</ul>
+</li>
+<li class=""><a href="#2-Trees" title="2. Trees">2. Trees</a></li>
+<li><a href="#Conclusion" title="Conclusion">Conclusion</a></li>
+</ul>
+</li>
+</ul>
+</div><div class="toc-menu"><a class="expand-toggle" href="#">Expand all</a><a class="back-to-top" href="#">Back to top</a><a class="go-to-bottom" href="#">Go to bottom</a></div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gist-embed/2.6.0/gist-embed.min.js" integrity="sha256-KyF2D6xPIJUW5sUDSs93vWyZm+1RzIpKCexxElmxl8g=" crossorigin="anonymous" defer></script>
+    <script>
+        var markdown = $(".markdown-body");
+        //smooth all hash trigger scrolling
+        function smoothHashScroll() {
+            var hashElements = $("a[href^='#']").toArray();
+            for (var i = 0; i < hashElements.length; i++) {
+                var element = hashElements[i];
+                var $element = $(element);
+                var hash = element.hash;
+                if (hash) {
+                    $element.on('click', function (e) {
+                        // store hash
+                        var hash = this.hash;
+                        if ($(hash).length <= 0) return;
+                        // prevent default anchor click behavior
+                        e.preventDefault();
+                        // animate
+                        $('body, html').stop(true, true).animate({
+                            scrollTop: $(hash).offset().top
+                        }, 100, "linear", function () {
+                            // when done, add hash to url
+                            // (default click behaviour)
+                            window.location.hash = hash;
+                        });
+                    });
+                }
+            }
+        }
+
+        smoothHashScroll();
+        var toc = $('.ui-toc');
+        var tocAffix = $('.ui-affix-toc');
+        var tocDropdown = $('.ui-toc-dropdown');
+        //toc
+        tocDropdown.click(function (e) {
+            e.stopPropagation();
+        });
+
+        var enoughForAffixToc = true;
+
+        function generateScrollspy() {
+            $(document.body).scrollspy({
+                target: ''
+            });
+            $(document.body).scrollspy('refresh');
+            if (enoughForAffixToc) {
+                toc.hide();
+                tocAffix.show();
+            } else {
+                tocAffix.hide();
+                toc.show();
+            }
+            $(document.body).scroll();
+        }
+
+        function windowResize() {
+            //toc right
+            var paddingRight = parseFloat(markdown.css('padding-right'));
+            var right = ($(window).width() - (markdown.offset().left + markdown.outerWidth() - paddingRight));
+            toc.css('right', right + 'px');
+            //affix toc left
+            var newbool;
+            var rightMargin = (markdown.parent().outerWidth() - markdown.outerWidth()) / 2;
+            //for ipad or wider device
+            if (rightMargin >= 133) {
+                newbool = true;
+                var affixLeftMargin = (tocAffix.outerWidth() - tocAffix.width()) / 2;
+                var left = markdown.offset().left + markdown.outerWidth() - affixLeftMargin;
+                tocAffix.css('left', left + 'px');
+            } else {
+                newbool = false;
+            }
+            if (newbool != enoughForAffixToc) {
+                enoughForAffixToc = newbool;
+                generateScrollspy();
+            }
+        }
+        $(window).resize(function () {
+            windowResize();
+        });
+        $(document).ready(function () {
+            windowResize();
+            generateScrollspy();
+        });
+
+        //remove hash
+        function removeHash() {
+            window.location.hash = '';
+        }
+
+        var backtotop = $('.back-to-top');
+        var gotobottom = $('.go-to-bottom');
+
+        backtotop.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToTop)
+                scrollToTop();
+            removeHash();
+        });
+        gotobottom.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (scrollToBottom)
+                scrollToBottom();
+            removeHash();
+        });
+
+        var toggle = $('.expand-toggle');
+        var tocExpand = false;
+
+        checkExpandToggle();
+        toggle.click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            tocExpand = !tocExpand;
+            checkExpandToggle();
+        })
+
+        function checkExpandToggle () {
+            var toc = $('.ui-toc-dropdown .toc');
+            var toggle = $('.expand-toggle');
+            if (!tocExpand) {
+                toc.removeClass('expand');
+                toggle.text('Expand all');
+            } else {
+                toc.addClass('expand');
+                toggle.text('Collapse all');
+            }
+        }
+
+        function scrollToTop() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: 0
+            }, 100, "linear");
+        }
+
+        function scrollToBottom() {
+            $('body, html').stop(true, true).animate({
+                scrollTop: $(document.body)[0].scrollHeight
+            }, 100, "linear");
+        }
+    </script>
+</body>
+
+</html>
